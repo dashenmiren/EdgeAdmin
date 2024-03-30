@@ -1,7 +1,7 @@
 package setup
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
+	"github.com/dashenmiren/EdgeAdmin/internal/setup"
 	"github.com/iwind/TeaGo/actions"
 )
 

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 )
 
 func TestStringsStream_Filter(t *testing.T) {

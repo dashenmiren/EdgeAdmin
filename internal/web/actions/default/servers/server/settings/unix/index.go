@@ -1,7 +1,7 @@
 package unix
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 )
 
 type IndexAction struct {

@@ -1,7 +1,7 @@
 package dns
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/rands"
 )
 

@@ -1,8 +1,8 @@
 package compression
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 

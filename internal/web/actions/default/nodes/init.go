@@ -1,9 +1,9 @@
 package nodes
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/ipAddresses"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/ipAddresses"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 
@@ -18,7 +18,6 @@ func init() {
 			// IP地址
 			GetPost("/ipAddresses/createPopup", new(ipAddresses.CreatePopupAction)).
 			GetPost("/ipAddresses/updatePopup", new(ipAddresses.UpdatePopupAction)).
-
 			EndAll()
 	})
 }

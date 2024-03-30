@@ -1,6 +1,6 @@
 package setup
 
-import "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+import "github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 
 var currentStatusText = ""
 

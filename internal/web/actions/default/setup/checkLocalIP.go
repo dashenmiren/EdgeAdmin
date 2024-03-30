@@ -3,8 +3,8 @@ package setup
 import (
 	"net"
 
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 )
 
 // CheckLocalIPAction 检查IP是否为局域网IP

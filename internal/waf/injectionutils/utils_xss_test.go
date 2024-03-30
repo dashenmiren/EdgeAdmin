@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/TeaOSLab/EdgeAdmin/internal/waf/injectionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/waf/injectionutils"
 	"github.com/iwind/TeaGo/assert"
 )
 
