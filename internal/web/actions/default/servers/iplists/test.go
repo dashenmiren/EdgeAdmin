@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package iplists
 
 import (
@@ -45,7 +47,7 @@ func (this *TestAction) RunPost(params struct {
 		return
 	}
 
-	resultMap := maps.Map{
+	var resultMap = maps.Map{
 		"isDone":    true,
 		"isFound":   resp.IsFound,
 		"isOk":      resp.IsOk,
@@ -56,6 +58,7 @@ func (this *TestAction) RunPost(params struct {
 	if resp.IpItem != nil {
 		resultMap["item"] = maps.Map{
 			"id":             resp.IpItem.Id,
+			"value":          resp.IpItem.Value,
 			"ipFrom":         resp.IpItem.IpFrom,
 			"ipTo":           resp.IpItem.IpTo,
 			"reason":         resp.IpItem.Reason,
@@ -64,6 +67,7 @@ func (this *TestAction) RunPost(params struct {
 			"expiredTime":    timeutil.FormatTime("Y-m-d H:i:s", resp.IpItem.ExpiredAt),
 			"type":           resp.IpItem.Type,
 			"eventLevelName": firewallconfigs.FindFirewallEventLevelName(resp.IpItem.EventLevel),
+			"listType":       resp.IpItem.ListType,
 		}
 	}
 

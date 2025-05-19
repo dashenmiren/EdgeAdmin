@@ -1,8 +1,8 @@
 package domains
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeCommon/pkg/iputils"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -65,7 +65,7 @@ func (this *NodesPopupAction) RunGet(params struct {
 					var isResolved = false
 					if len(route.Name) > 0 && len(node.IpAddr) > 0 && len(cluster.DnsName) > 0 {
 						var recordType = "A"
-						if utils.IsIPv6(node.IpAddr) {
+						if iputils.IsIPv6(node.IpAddr) {
 							recordType = "AAAA"
 						}
 						checkResp, err := this.RPC().DNSDomainRPC().ExistDNSDomainRecord(this.AdminContext(), &pb.ExistDNSDomainRecordRequest{
@@ -99,7 +99,7 @@ func (this *NodesPopupAction) RunGet(params struct {
 				var isResolved = false
 				if len(defaultRoute) > 0 {
 					var recordType = "A"
-					if utils.IsIPv6(node.IpAddr) {
+					if iputils.IsIPv6(node.IpAddr) {
 						recordType = "AAAA"
 					}
 					checkResp, err := this.RPC().DNSDomainRPC().ExistDNSDomainRecord(this.AdminContext(), &pb.ExistDNSDomainRecordRequest{

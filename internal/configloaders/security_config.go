@@ -80,7 +80,7 @@ func loadSecurityConfig() (*systemconfigs.SecurityConfig, error) {
 		return nil, err
 	}
 	if len(resp.ValueJSON) == 0 {
-		sharedSecurityConfig = defaultSecurityConfig()
+		sharedSecurityConfig = NewSecurityConfig()
 		return sharedSecurityConfig, nil
 	}
 
@@ -95,7 +95,7 @@ func loadSecurityConfig() (*systemconfigs.SecurityConfig, error) {
 	err = json.Unmarshal(resp.ValueJSON, config)
 	if err != nil {
 		logs.Println("[SECURITY_MANAGER]" + err.Error())
-		sharedSecurityConfig = defaultSecurityConfig()
+		sharedSecurityConfig = NewSecurityConfig()
 		return sharedSecurityConfig, nil
 	}
 	err = config.Init()
@@ -106,7 +106,8 @@ func loadSecurityConfig() (*systemconfigs.SecurityConfig, error) {
 	return sharedSecurityConfig, nil
 }
 
-func defaultSecurityConfig() *systemconfigs.SecurityConfig {
+// NewSecurityConfig create new security config
+func NewSecurityConfig() *systemconfigs.SecurityConfig {
 	return &systemconfigs.SecurityConfig{
 		Frame:                  FrameSameOrigin,
 		AllowLocal:             true,

@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package remoteAddr
 
 import (
@@ -25,6 +27,11 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
+	// 只有HTTP服务才支持
+	if this.FilterHTTPFamily() {
+		return
+	}
+
 	// 服务分组设置
 	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
 		ServerId: params.ServerId,

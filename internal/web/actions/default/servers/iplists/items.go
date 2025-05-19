@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package iplists
 
 import (
@@ -117,6 +119,7 @@ func (this *ItemsAction) RunGet(params struct {
 
 		itemMaps = append(itemMaps, maps.Map{
 			"id":             item.Id,
+			"value":          item.Value,
 			"ipFrom":         item.IpFrom,
 			"ipTo":           item.IpTo,
 			"createdTime":    timeutil.FormatTime("Y-m-d", item.CreatedAt),

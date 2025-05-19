@@ -1,3 +1,5 @@
+// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+
 package dashboardutils
 
 import (
@@ -20,7 +22,7 @@ import (
 	"github.com/shirou/gopsutil/v3/disk"
 )
 
-// CheckDiskPartitions 检查服务器磁盘空间
+// CheckDiskPartitions 检查服务器硬盘空间
 func CheckDiskPartitions(thresholdPercent float64) (path string, usage uint64, usagePercent float64, shouldWarning bool) {
 	partitions, err := disk.Partitions(false)
 	if err != nil {

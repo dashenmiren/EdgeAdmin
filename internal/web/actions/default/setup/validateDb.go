@@ -2,6 +2,7 @@ package setup
 
 import (
 	"net"
+	"net/url"
 	"regexp"
 	"strings"
 
@@ -58,7 +59,7 @@ func (this *ValidateDbAction) RunPost(params struct {
 	// 测试连接
 	db, err := dbs.NewInstanceFromConfig(&dbs.DBConfig{
 		Driver: "mysql",
-		Dsn:    params.Username + ":" + params.Password + "@tcp(" + configutils.QuoteIP(params.Host) + ":" + params.Port + ")/" + params.Database,
+		Dsn:    url.QueryEscape(params.Username) + ":" + params.Password + "@tcp(" + configutils.QuoteIP(params.Host) + ":" + params.Port + ")/" + params.Database,
 		Prefix: "",
 	})
 	if err != nil {

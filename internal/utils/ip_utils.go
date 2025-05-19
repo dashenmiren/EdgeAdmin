@@ -2,47 +2,66 @@ package utils
 
 import (
 	"bytes"
-	"encoding/binary"
 	"errors"
-	"github.com/iwind/TeaGo/types"
-	"math/big"
 	"net"
-	"regexp"
 	"strings"
+
+	"github.com/dashenmiren/EdgeCommon/pkg/iputils"
+	"github.com/iwind/TeaGo/types"
 )
 
-// IP2Long 将IP转换为整型
-func IP2Long(ip string) uint64 {
-	s := net.ParseIP(ip)
-	if len(s) != 16 {
-		return 0
+// ParseIPValue 解析IP值
+func ParseIPValue(value string) (newValue string, ipFrom string, ipTo string, ok bool) {
+	if len(value) == 0 {
+		return
 	}
 
-	if strings.Contains(ip, ":") { // IPv6
-		bigInt := big.NewInt(0)
-		bigInt.SetBytes(s.To16())
-		return bigInt.Uint64()
-	}
-	return uint64(binary.BigEndian.Uint32(s.To4()))
-}
+	newValue = value
 
-// IsIPv4 判断是否为IPv4
-func IsIPv4(ip string) bool {
-	if !regexp.MustCompile(`^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$`).MatchString(ip) {
-		return false
-	}
-	if IP2Long(ip) == 0 {
-		return false
-	}
-	return true
-}
+	// ip1-ip2
+	if strings.Contains(value, "-") {
+		var pieces = strings.Split(value, "-")
+		if len(pieces) != 2 {
+			return
+		}
 
-// IsIPv6 判断是否为IPv6
-func IsIPv6(ip string) bool {
-	if !strings.Contains(ip, ":") {
-		return false
+		ipFrom = strings.TrimSpace(pieces[0])
+		ipTo = strings.TrimSpace(pieces[1])
+
+		if !iputils.IsValid(ipFrom) || !iputils.IsValid(ipTo) {
+			return
+		}
+
+		if !iputils.IsSameVersion(ipFrom, ipTo) {
+			return
+		}
+
+		if iputils.CompareIP(ipFrom, ipTo) > 0 {
+			ipFrom, ipTo = ipTo, ipFrom
+			newValue = ipFrom + "-" + ipTo
+		}
+
+		ok = true
+		return
 	}
-	return len(net.ParseIP(ip)) == net.IPv6len
+
+	// ip/mask
+	if strings.Contains(value, "/") {
+		cidr, err := iputils.ParseCIDR(value)
+		if err != nil {
+			return
+		}
+		return newValue, cidr.From().String(), cidr.To().String(), true
+	}
+
+	// single value
+	if iputils.IsValid(value) {
+		ipFrom = value
+		ok = true
+		return
+	}
+
+	return
 }
 
 // ExtractIP 分解IP

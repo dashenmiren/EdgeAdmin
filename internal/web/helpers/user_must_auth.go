@@ -50,6 +50,9 @@ var nodeLogsType = ""
 // IP名单
 var countUnreadIPItems int64 = 0
 
+// 安全相关
+var securityXFFPromptDisabled = false
+
 func init() {
 	events.On(events.EventStart, func() {
 		// 节点日志数量
@@ -201,19 +204,36 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	}
 
 	// 检查区域
-	if securityConfig != nil && securityConfig.CheckClientRegion {
-		var oldClientIP = session.GetString("@ip")
-		var currentClientIP = loginutils.RemoteIP(action)
-		if len(oldClientIP) > 0 && len(currentClientIP) > 0 && oldClientIP != currentClientIP {
-			var oldRegion = loginutils.LookupIPRegion(oldClientIP)
-			var newRegion = loginutils.LookupIPRegion(currentClientIP)
-			if newRegion != oldRegion {
+	var oldClientIP = session.GetString("@ip")
+	var currentClientIP = loginutils.RemoteIP(action)
+	if len(oldClientIP) > 0 && len(currentClientIP) > 0 && oldClientIP != currentClientIP {
+		var oldRegion = loginutils.LookupIPRegion(oldClientIP)
+		var newRegion = loginutils.LookupIPRegion(currentClientIP)
+		if newRegion != oldRegion {
+			if securityConfig != nil && securityConfig.CheckClientRegion {
 				loginutils.UnsetCookie(action)
 				session.Delete()
 
 				this.login(action)
 				return false
+			} else {
+				if !lists.ContainsString([]string{"/messages/badge", "/dns/tasks/check", "/clusters/tasks/check"}, action.Request.URL.Path) {
+					// TODO 考虑IP变化时也需要验证，主要是考虑被反向代理的情形
+					action.RedirectURL("/login/validate?from=" + url.QueryEscape(action.Request.URL.String()))
+					return false
+				}
 			}
+		}
+	}
+
+	// 是否正在使用反向代理模式
+	if action.Request.Method == http.MethodGet {
+		action.Data["teaXFFPrompt"] = false
+		if !securityXFFPromptDisabled &&
+			(len(action.Header("X-Forwarded-For")) > 0 || len(action.Header("X-Real-Ip")) > 0 || len(action.Header("Cf-Connecting-Ip")) > 0) &&
+			securityConfig != nil &&
+			len(securityConfig.ClientIPHeaderNames) == 0 {
+			action.Data["teaXFFPrompt"] = true
 		}
 	}
 

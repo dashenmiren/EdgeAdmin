@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package dashboard
 
 import (
@@ -91,13 +93,16 @@ func (this *IndexAction) RunPost(params struct{}) {
 		"diskUsageWarning": diskUsageWarning,
 	}
 
-	// 今日流量
-	todayTrafficBytes := int64(0)
+	// 今日流量和独立IP数
+	var todayTrafficBytes int64
+	var todayCountIPs int64
 	if len(resp.DailyTrafficStats) > 0 {
-		todayTrafficBytes = resp.DailyTrafficStats[len(resp.DailyTrafficStats)-1].Bytes
+		var lastDailyTrafficStat = resp.DailyTrafficStats[len(resp.DailyTrafficStats)-1]
+		todayTrafficBytes = lastDailyTrafficStat.Bytes
+		todayCountIPs = lastDailyTrafficStat.CountIPs
 	}
-	todayTrafficString := numberutils.FormatBytes(todayTrafficBytes)
-	result := regexp.MustCompile(`^(?U)(.+)([a-zA-Z]+)$`).FindStringSubmatch(todayTrafficString)
+	var todayTrafficString = numberutils.FormatBytes(todayTrafficBytes)
+	var result = regexp.MustCompile(`^(?U)(.+)([a-zA-Z]+)$`).FindStringSubmatch(todayTrafficString)
 	if len(result) > 2 {
 		this.Data["todayTraffic"] = result[1]
 		this.Data["todayTrafficUnit"] = result[2]
@@ -105,6 +110,8 @@ func (this *IndexAction) RunPost(params struct{}) {
 		this.Data["todayTraffic"] = todayTrafficString
 		this.Data["todayTrafficUnit"] = ""
 	}
+
+	this.Data["todayCountIPs"] = todayCountIPs
 
 	// 24小时流量趋势
 	{
@@ -136,6 +143,7 @@ func (this *IndexAction) RunPost(params struct{}) {
 				"countAttackRequests": stat.CountAttackRequests,
 				"attackBytes":         stat.AttackBytes,
 				"day":                 stat.Day[4:6] + "月" + stat.Day[6:] + "日",
+				"countIPs":            stat.CountIPs,
 			})
 		}
 		this.Data["dailyTrafficStats"] = statMaps

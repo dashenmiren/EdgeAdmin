@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 	"github.com/dashenmiren/EdgeAdmin/internal/utils/numberutils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/ipAddresses/ipaddressutils"
+	"github.com/dashenmiren/EdgeCommon/pkg/iputils"
 	"github.com/dashenmiren/EdgeCommon/pkg/nodeconfigs"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
@@ -179,7 +179,7 @@ func (this *DetailAction) RunGet(params struct {
 
 			for _, route := range dnsInfo.Routes {
 				var recordType = "A"
-				if utils.IsIPv6(addr.Ip) {
+				if iputils.IsIPv6(addr.Ip) {
 					recordType = "AAAA"
 				}
 				recordMaps = append(recordMaps, maps.Map{

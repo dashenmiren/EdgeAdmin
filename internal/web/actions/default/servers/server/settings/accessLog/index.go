@@ -1,7 +1,6 @@
 package accessLog
 
-import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+import (	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
@@ -22,6 +21,11 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
+	// 只有HTTP服务才支持
+	if this.FilterHTTPFamily() {
+		return
+	}
+
 	// 网站分组设置
 	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
 		ServerId: params.ServerId,

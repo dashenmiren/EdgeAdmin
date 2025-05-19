@@ -36,16 +36,17 @@
 			<td>
 				<div class="ui input left labeled">
                     <span class="ui label">{{protocol.toLowerCase()}}://</span>
-                    <input type="text" name="addr" ref="focus" v-model="addr" @input="changeAddr"/>
+                    <input type="text" name="addr" ref="focus" v-model="addr" @input="changeAddr" @change="detectHTTPS"/>
                 </div>
-				<p class="comment"><span class="red" v-if="addrError.length > 0">{{addrError}}</span>源站服务器地址，通常是一个IP（或域名）加端口<span v-if="serverType == 'httpProxy'">，不需要加 http:// 或 https://</span>。</p>
+                <p class="comment" style="padding-bottom: 0; margin-bottom: 0" v-if="addrError.length == 0 && adviceHTTPS && protocol == 'http'"><span class="red">系统检测到当前源站有HTTPS协议可用，是否切换到HTTPS协议？</span> <a href="" @click.prevent="switchToHTTPS">[点此切换]</a></p>
+				<p class="comment"><span class="red" v-if="addrError.length > 0">{{addrError}}</span>源站服务器地址，通常是一个IP（或域名）加端口，80和443端口可以省略<span v-if="serverType == 'httpProxy'">，不需要加 http:// 或 https://</span>。</p>
 			</td>
 		</tr>
         <tr v-if="(isHTTP || protocol == 'tls') && !isOSS">
             <td>回源主机名</td>
             <td>
                 <input type="text" name="host" placeholder="比如example.com" maxlength="100"/>
-                <p class="comment">可选项。请求源站时的Host字段值，用于设置访问源站的站点域名<span v-if="isHTTP">，支持请求变量</span>。</p>
+                <p class="comment">可选项。请求源站时的Host字段值，用于设置访问源站的站点域名<span v-if="isHTTP">，支持请求变量</span>；如果用户访问的域名和源站域名不一致，请务必设置为源站域名。</p>
             </td>
         </tr>
 

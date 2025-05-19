@@ -7,6 +7,7 @@ import (
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ipconfigs"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
 )
@@ -35,7 +36,7 @@ func (this *DenyListAction) RunGet(params struct {
 
 	// 创建
 	if listId == 0 {
-		listId, err = dao.SharedIPListDAO.CreateIPListForServerId(this.AdminContext(), params.ServerId, "black")
+		listId, err = dao.SharedIPListDAO.CreateIPListForServerId(this.AdminContext(), params.ServerId, ipconfigs.IPListTypeBlack)
 		if err != nil {
 			this.ErrorPage(err)
 			return
@@ -64,9 +65,9 @@ func (this *DenyListAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	itemMaps := []maps.Map{}
+	var itemMaps = []maps.Map{}
 	for _, item := range itemsResp.IpItems {
-		expiredTime := ""
+		var expiredTime = ""
 		if item.ExpiredAt > 0 {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}
@@ -110,6 +111,7 @@ func (this *DenyListAction) RunGet(params struct {
 
 		itemMaps = append(itemMaps, maps.Map{
 			"id":             item.Id,
+			"value":          item.Value,
 			"ipFrom":         item.IpFrom,
 			"ipTo":           item.IpTo,
 			"createdTime":    timeutil.FormatTime("Y-m-d", item.CreatedAt),

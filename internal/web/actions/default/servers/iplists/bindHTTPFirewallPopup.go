@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package iplists
 
 import (
@@ -39,6 +41,9 @@ func (this *BindHTTPFirewallPopupAction) RunGet(params struct {
 			selectedIds = append(selectedIds, ref.ListId)
 		}
 		for _, ref := range inboundConfig.PublicDenyListRefs {
+			selectedIds = append(selectedIds, ref.ListId)
+		}
+		for _, ref := range inboundConfig.PublicGreyListRefs {
 			selectedIds = append(selectedIds, ref.ListId)
 		}
 	}

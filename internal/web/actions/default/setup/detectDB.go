@@ -1,7 +1,10 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package setup
 
 import (
 	"net"
+	"net/url"
 	"os"
 	"runtime"
 	"strings"
@@ -47,7 +50,7 @@ func (this *DetectDBAction) RunPost(params struct{}) {
 			for _, pass := range passwords {
 				db, err := dbs.NewInstanceFromConfig(&dbs.DBConfig{
 					Driver: "mysql",
-					Dsn:    username + ":" + pass + "@tcp(" + configutils.QuoteIP(localHost) + ":" + localPort + ")/edges",
+					Dsn:    url.QueryEscape(username) + ":" + url.QueryEscape(pass) + "@tcp(" + configutils.QuoteIP(localHost) + ":" + localPort + ")/edges",
 					Prefix: "",
 				})
 				if err == nil {

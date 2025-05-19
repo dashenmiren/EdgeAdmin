@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package iplists
 
 import (
@@ -83,7 +85,7 @@ func (this *IndexAction) RunGet(params struct {
 	var itemMaps = []maps.Map{}
 	for _, result := range itemsResp.Results {
 		var item = result.IpItem
-		expiredTime := ""
+		var expiredTime = ""
 		if item.ExpiredAt > 0 {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}
@@ -171,6 +173,7 @@ func (this *IndexAction) RunGet(params struct {
 
 		itemMaps = append(itemMaps, maps.Map{
 			"id":             item.Id,
+			"value":          item.Value,
 			"ipFrom":         item.IpFrom,
 			"ipTo":           item.IpTo,
 			"createdTime":    timeutil.FormatTime("Y-m-d", item.CreatedAt),

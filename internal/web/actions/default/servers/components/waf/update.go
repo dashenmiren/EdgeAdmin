@@ -2,7 +2,6 @@ package waf
 
 import (
 	"encoding/json"
-	"net/http"
 
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
@@ -37,17 +36,17 @@ func (this *UpdateAction) RunGet(params struct {
 
 	// block options
 	if firewallPolicy.BlockOptions == nil {
-		firewallPolicy.BlockOptions = &firewallconfigs.HTTPFirewallBlockAction{
-			StatusCode: http.StatusForbidden,
-			Body:       "Blocked By WAF",
-			URL:        "",
-			Timeout:    60,
-		}
+		firewallPolicy.BlockOptions = firewallconfigs.NewHTTPFirewallBlockAction()
 	}
 
 	// page options
 	if firewallPolicy.PageOptions == nil {
-		firewallPolicy.PageOptions = firewallconfigs.DefaultHTTPFirewallPageAction()
+		firewallPolicy.PageOptions = firewallconfigs.NewHTTPFirewallPageAction()
+	}
+
+	// jscookie options
+	if firewallPolicy.JSCookieOptions == nil {
+		firewallPolicy.JSCookieOptions = firewallconfigs.NewHTTPFirewallJavascriptCookieAction()
 	}
 
 	// mode
@@ -80,6 +79,7 @@ func (this *UpdateAction) RunGet(params struct {
 		"blockOptions":       firewallPolicy.BlockOptions,
 		"pageOptions":        firewallPolicy.PageOptions,
 		"captchaOptions":     firewallPolicy.CaptchaOptions,
+		"jsCookieOptions":    firewallPolicy.JSCookieOptions,
 		"useLocalFirewall":   firewallPolicy.UseLocalFirewall,
 		"synFloodConfig":     firewallPolicy.SYNFlood,
 		"log":                firewallPolicy.Log,
@@ -111,21 +111,22 @@ func (this *UpdateAction) RunGet(params struct {
 }
 
 func (this *UpdateAction) RunPost(params struct {
-	FirewallPolicyId   int64
-	Name               string
-	GroupCodes         []string
-	BlockOptionsJSON   []byte
-	PageOptionsJSON    []byte
-	CaptchaOptionsJSON []byte
-	Description        string
-	IsOn               bool
-	Mode               string
-	UseLocalFirewall   bool
-	SynFloodJSON       []byte
-	LogJSON            []byte
-	MaxRequestBodySize int64
-	DenyCountryHTML    string
-	DenyProvinceHTML   string
+	FirewallPolicyId    int64
+	Name                string
+	GroupCodes          []string
+	BlockOptionsJSON    []byte
+	PageOptionsJSON     []byte
+	CaptchaOptionsJSON  []byte
+	JsCookieOptionsJSON []byte
+	Description         string
+	IsOn                bool
+	Mode                string
+	UseLocalFirewall    bool
+	SynFloodJSON        []byte
+	LogJSON             []byte
+	MaxRequestBodySize  int64
+	DenyCountryHTML     string
+	DenyProvinceHTML    string
 
 	Must *actions.Must
 }) {
@@ -137,7 +138,7 @@ func (this *UpdateAction) RunPost(params struct {
 		Require("请输入策略名称")
 
 	// 校验拦截选项JSON
-	var blockOptions = &firewallconfigs.HTTPFirewallBlockAction{}
+	var blockOptions = firewallconfigs.NewHTTPFirewallBlockAction()
 	err := json.Unmarshal(params.BlockOptionsJSON, blockOptions)
 	if err != nil {
 		this.Fail("拦截动作参数校验失败：" + err.Error())
@@ -145,7 +146,7 @@ func (this *UpdateAction) RunPost(params struct {
 	}
 
 	// 校验显示页面选项JSON
-	var pageOptions = &firewallconfigs.HTTPFirewallPageAction{}
+	var pageOptions = firewallconfigs.NewHTTPFirewallPageAction()
 	err = json.Unmarshal(params.PageOptionsJSON, pageOptions)
 	if err != nil {
 		this.Fail("校验显示页面动作配置失败：" + err.Error())
@@ -157,7 +158,7 @@ func (this *UpdateAction) RunPost(params struct {
 	}
 
 	// 校验验证码选项JSON
-	var captchaOptions = &firewallconfigs.HTTPFirewallCaptchaAction{}
+	var captchaOptions = firewallconfigs.NewHTTPFirewallCaptchaAction()
 	err = json.Unmarshal(params.CaptchaOptionsJSON, captchaOptions)
 	if err != nil {
 		this.Fail("验证码动作参数校验失败：" + err.Error())
@@ -181,6 +182,16 @@ func (this *UpdateAction) RunPost(params struct {
 		}
 	}
 
+	// 校验JSCookie选项JSON
+	var jsCookieOptions = firewallconfigs.NewHTTPFirewallJavascriptCookieAction()
+	if len(params.JsCookieOptionsJSON) > 0 {
+		err = json.Unmarshal(params.JsCookieOptionsJSON, jsCookieOptions)
+		if err != nil {
+			this.Fail("JSCookie动作参数校验失败：" + err.Error())
+			return
+		}
+	}
+
 	// 最大内容尺寸
 	if params.MaxRequestBodySize < 0 {
 		params.MaxRequestBodySize = 0
@@ -195,6 +206,7 @@ func (this *UpdateAction) RunPost(params struct {
 		BlockOptionsJSON:     params.BlockOptionsJSON,
 		PageOptionsJSON:      params.PageOptionsJSON,
 		CaptchaOptionsJSON:   params.CaptchaOptionsJSON,
+		JsCookieOptionsJSON:  params.JsCookieOptionsJSON,
 		Mode:                 params.Mode,
 		UseLocalFirewall:     params.UseLocalFirewall,
 		SynFloodJSON:         params.SynFloodJSON,

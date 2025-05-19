@@ -40,13 +40,34 @@ Vue.component("origin-list-box", {
 				}
 			})
 		},
-		deleteOrigin: function (originId, originType) {
+		deleteOrigin: function (originId, originAddr, originType) {
 			let that = this
-			teaweb.confirm("确定要删除此源站吗？", function () {
+			teaweb.confirm("确定要删除此源站（" + originAddr + "）吗？", function () {
 				Tea.action("/servers/server/settings/origins/delete?" + that.vParams + "&originId=" + originId + "&originType=" + originType)
 					.post()
 					.success(function () {
 						teaweb.success("删除成功", function () {
+							window.location.reload()
+						})
+					})
+			})
+		},
+		updateOriginIsOn: function (originId, originAddr, isOn) {
+			let message
+			let resultMessage
+			if (isOn) {
+				message = "确定要启用此源站（" + originAddr + "）吗？"
+				resultMessage = "启用成功"
+			} else {
+				message = "确定要停用此源站（" + originAddr + "）吗？"
+				resultMessage = "停用成功"
+			}
+			let that = this
+			teaweb.confirm(message, function () {
+				Tea.action("/servers/server/settings/origins/updateIsOn?" + that.vParams + "&originId=" + originId + "&isOn=" + (isOn ? 1 : 0))
+					.post()
+					.success(function () {
+						teaweb.success(resultMessage, function () {
 							window.location.reload()
 						})
 					})
@@ -56,11 +77,11 @@ Vue.component("origin-list-box", {
 	template: `<div>
 	<h3>主要源站 <a href="" @click.prevent="createPrimaryOrigin()">[添加主要源站]</a> </h3>
 	<p class="comment" v-if="primaryOrigins.length == 0">暂时还没有主要源站。</p>
-	<origin-list-table v-if="primaryOrigins.length > 0" :v-origins="vPrimaryOrigins" :v-origin-type="'primary'" @deleteOrigin="deleteOrigin" @updateOrigin="updateOrigin"></origin-list-table>
+	<origin-list-table v-if="primaryOrigins.length > 0" :v-origins="vPrimaryOrigins" :v-origin-type="'primary'" @delete-origin="deleteOrigin" @update-origin="updateOrigin" @update-origin-is-on="updateOriginIsOn"></origin-list-table>
 
 	<h3>备用源站 <a href="" @click.prevent="createBackupOrigin()">[添加备用源站]</a></h3>
-	<p class="comment" v-if="backupOrigins.length == 0" :v-origins="primaryOrigins">暂时还没有备用源站。</p>
-	<origin-list-table v-if="backupOrigins.length > 0" :v-origins="backupOrigins" :v-origin-type="'backup'" @deleteOrigin="deleteOrigin" @updateOrigin="updateOrigin"></origin-list-table>
+	<p class="comment" v-if="backupOrigins.length == 0">暂时还没有备用源站。</p>
+	<origin-list-table v-if="backupOrigins.length > 0" :v-origins="backupOrigins" :v-origin-type="'backup'" @delete-origin="deleteOrigin" @update-origin="updateOrigin" @update-origin-is-on="updateOriginIsOn"></origin-list-table>
 </div>`
 })
 
@@ -82,11 +103,14 @@ Vue.component("origin-list-table", {
 		}
 	},
 	methods: {
-		deleteOrigin: function (originId) {
-			this.$emit("deleteOrigin", originId, this.vOriginType)
+		deleteOrigin: function (originId, originAddr) {
+			this.$emit("delete-origin", originId, originAddr, this.vOriginType)
 		},
 		updateOrigin: function (originId) {
-			this.$emit("updateOrigin", originId, this.vOriginType)
+			this.$emit("update-origin", originId, this.vOriginType)
+		},
+		updateOriginIsOn: function (originId, originAddr, isOn) {
+			this.$emit("update-origin-is-on", originId, originAddr, isOn)
 		}
 	},
 	template: `
@@ -94,9 +118,9 @@ Vue.component("origin-list-table", {
 	<thead>
 		<tr>
 			<th>源站地址</th>
-			<th>权重</th>
-			<th class="width10">状态</th>
-			<th class="two op">操作</th>
+			<th class="width5">权重</th>
+			<th class="width6">状态</th>
+			<th class="three op">操作</th>
 		</tr>	
 	</thead>
 	<tbody>
@@ -104,15 +128,15 @@ Vue.component("origin-list-table", {
 			<td :class="{disabled:!origin.isOn}">
 				<a href="" @click.prevent="updateOrigin(origin.id)" :class="{disabled:!origin.isOn}">{{origin.addr}} &nbsp;<i class="icon expand small"></i></a>
 				<div style="margin-top: 0.3em">
-					<tiny-basic-label v-if="origin.isOSS"><i class="icon hdd outline"></i>对象存储</tiny-basic-label>
-					<tiny-basic-label v-if="origin.name.length > 0">{{origin.name}}</tiny-basic-label>
-					<tiny-basic-label v-if="origin.hasCert">证书</tiny-basic-label>
-					<tiny-basic-label v-if="origin.host != null && origin.host.length > 0">主机名: {{origin.host}}</tiny-basic-label>
-					<tiny-basic-label v-if="origin.followPort">端口跟随</tiny-basic-label>
-					<tiny-basic-label v-if="origin.addr != null && origin.addr.startsWith('https://') && origin.http2Enabled">HTTP/2</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.isOSS"><i class="icon hdd outline"></i>对象存储</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.name.length > 0">{{origin.name}}</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.hasCert">证书</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.host != null && origin.host.length > 0">主机名: {{origin.host}}</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.followPort">端口跟随</tiny-basic-label>
+					<tiny-basic-label class="grey border-grey" v-if="origin.addr != null && origin.addr.startsWith('https://') && origin.http2Enabled">HTTP/2</tiny-basic-label>
 	
-					<span v-if="origin.domains != null && origin.domains.length > 0"><tiny-basic-label v-for="domain in origin.domains">匹配: {{domain}}</tiny-basic-label></span>
-					<span v-else-if="hasMatchedDomains"><tiny-basic-label>匹配: 所有域名</tiny-basic-label></span>
+					<span v-if="origin.domains != null && origin.domains.length > 0"><tiny-basic-label class="grey border-grey" v-for="domain in origin.domains">匹配: {{domain}}</tiny-basic-label></span>
+					<span v-else-if="hasMatchedDomains"><tiny-basic-label class="grey  border-grey">匹配: 所有域名</tiny-basic-label></span>
 				</div>
 			</td>
 			<td :class="{disabled:!origin.isOn}">{{origin.weight}}</td>
@@ -121,7 +145,8 @@ Vue.component("origin-list-table", {
 			</td>
 			<td>
 				<a href="" @click.prevent="updateOrigin(origin.id)">修改</a> &nbsp;
-				<a href="" @click.prevent="deleteOrigin(origin.id)">删除</a>
+				<a href="" v-if="origin.isOn" @click.prevent="updateOriginIsOn(origin.id, origin.addr, false)">停用</a><a href=""  v-if="!origin.isOn" @click.prevent="updateOriginIsOn(origin.id, origin.addr, true)"><span class="red">启用</span></a> &nbsp;
+				<a href="" @click.prevent="deleteOrigin(origin.id, origin.addr)">删除</a>
 			</td>
 		</tr>
 	</tbody>

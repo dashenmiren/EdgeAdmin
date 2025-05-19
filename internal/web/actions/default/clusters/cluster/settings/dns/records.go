@@ -1,8 +1,10 @@
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+
 package dns
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeCommon/pkg/iputils"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
@@ -108,7 +110,7 @@ func (this *RecordsAction) RunGet(params struct {
 				var isResolved = false
 				if isInstalled && cluster.DnsDomainId > 0 && len(cluster.DnsName) > 0 && len(node.IpAddr) > 0 {
 					var recordType = "A"
-					if utils.IsIPv6(node.IpAddr) {
+					if iputils.IsIPv6(node.IpAddr) {
 						recordType = "AAAA"
 					}
 					checkResp, err := this.RPC().DNSDomainRPC().ExistDNSDomainRecord(this.AdminContext(), &pb.ExistDNSDomainRecordRequest{
@@ -146,7 +148,7 @@ func (this *RecordsAction) RunGet(params struct {
 			var isResolved = false
 			if isInstalled && len(defaultRoute) > 0 {
 				var recordType = "A"
-				if utils.IsIPv6(node.IpAddr) {
+				if iputils.IsIPv6(node.IpAddr) {
 					recordType = "AAAA"
 				}
 				checkResp, err := this.RPC().DNSDomainRPC().ExistDNSDomainRecord(this.AdminContext(), &pb.ExistDNSDomainRecordRequest{

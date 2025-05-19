@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package cache
 
 import (
@@ -116,6 +118,7 @@ func (this *FetchAction) RunPost(params struct {
 		}
 		realKeys = append(realKeys, key)
 	}
+
 
 	// 校验Key
 	validateResp, err := this.RPC().HTTPCacheTaskKeyRPC().ValidateHTTPCacheTaskKeys(this.AdminContext(), &pb.ValidateHTTPCacheTaskKeysRequest{Keys: realKeys})

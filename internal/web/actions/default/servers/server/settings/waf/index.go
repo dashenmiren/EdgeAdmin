@@ -25,6 +25,11 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
+	// 只有HTTP服务才支持
+	if this.FilterHTTPFamily() {
+		return
+	}
+
 	// 服务分组设置
 	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
 		ServerId: params.ServerId,
@@ -45,7 +50,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["webId"] = webConfig.Id
 	this.Data["firewallConfig"] = webConfig.FirewallRef
 
-	// 获取当前服务所在集群的WAF设置
+	// 获取当前网站所在集群的WAF设置
 	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
@@ -53,7 +58,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	if firewallPolicy != nil {
 		// captcha action
-		var captchaOptions = firewallconfigs.DefaultHTTPFirewallCaptchaAction()
+		var captchaOptions = firewallconfigs.NewHTTPFirewallCaptchaAction()
 		if len(firewallPolicy.CaptchaOptionsJSON) > 0 {
 			err = json.Unmarshal(firewallPolicy.CaptchaOptionsJSON, captchaOptions)
 			if err != nil {

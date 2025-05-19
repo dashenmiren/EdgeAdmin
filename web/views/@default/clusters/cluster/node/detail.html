@@ -40,8 +40,8 @@
 						<div v-for="(address, index) in node.ipAddresses" class="ui label small basic">
                             <span v-if="address.ip.indexOf(':') > -1" class="grey">[IPv6]</span> {{address.ip}}
                             <span class="small red" v-if="address.originIP != null && address.originIP.length > 0 && address.originIP != address.ip">（原：{{address.originIP}}）</span>
-							<span class="small grey" v-if="address.name.length > 0">（备注：{{address.name}}<span v-if="!address.canAccess">，不可访问</span>）</span>
-							<span class="small grey" v-if="address.name.length == 0 && !address.canAccess">（不可访问）</span>
+							<span class="small grey" v-if="address.name.length > 0">（备注：{{address.name}}<span v-if="!address.canAccess">，不公开访问</span>）</span>
+							<span class="small grey" v-if="address.name.length == 0 && !address.canAccess">（不公开访问）</span>
                             <span class="small red" v-if="!address.isOn">[off]</span>
                             <span class="small red" v-if="!address.isUp">[down]</span>
                             <span class="small" v-if="address.thresholds != null && address.thresholds.length > 0">[阈值]</span>
@@ -172,7 +172,7 @@
 				</td>
 			</tr>
             <tr>
-                <td>缓存磁盘容量</td>
+                <td>缓存硬盘容量</td>
                 <td>
                     <span v-if="node.maxCacheDiskCapacity == null || node.maxCacheDiskCapacity.count <= 0" class="disabled">没有限制</span>
                    <div v-else>
@@ -181,7 +181,7 @@
                 </td>
             </tr>
             <tr>
-                <td>磁盘预估写入最大速度</td>
+                <td>硬盘预估写入最大速度</td>
                 <td>
                     <span v-if="node.status.diskWritingSpeedMB == 0">-</span><span v-if="node.status.diskWritingSpeedMB > 0">&gt; {{node.status.diskWritingSpeedMB}}</span>
                     <span v-if="node.status.diskWritingSpeedMB > 1000">MiB/s 极快</span>
@@ -257,7 +257,7 @@
             <tr>
                 <td>缓存用量</td>
                 <td>
-                    磁盘：{{node.status.cacheTotalDiskSize}}  &nbsp; 内存：{{node.status.cacheTotalMemorySize}}
+                    硬盘：{{node.status.cacheTotalDiskSize}}  &nbsp; 内存：{{node.status.cacheTotalMemorySize}}
                 </td>
             </tr>
         </tbody>
@@ -319,10 +319,14 @@
 			</td>
 		</tr>
 		<tr>
-			<td>是否已安装</td>
+			<td>已安装</td>
 			<td>
-				<span v-if="node.isInstalled" class="green">已安装</span>
+				<span v-if="node.isInstalled" class="green">已安装 &nbsp; <a href="" @click.prevent="showMoreOps"><span class="small">[操作]</span></a></span>
 				<a v-else :href="'/clusters/cluster/installNode?clusterId=' + clusterId + '&nodeId=' + nodeId" class="underline" title="点击进入安装界面"><span class="red">未安装</span></a>
 			</td>
 		</tr>
+        <tr v-show="moreOpsVisible && node.isInstalled">
+            <td>操作</td>
+            <td><a href="" @click.prevent="uninstallNode">[卸载]</a> </td>
+        </tr>
 	</table>

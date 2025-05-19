@@ -44,7 +44,7 @@ func (this *TestWriteAction) RunPost(params struct {
 		Value:           []byte(params.Value),
 		LifeSeconds:     3600,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeWriteCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeWriteCache, msg, 10, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package ipbox
 
 import (
@@ -24,6 +26,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 
 	// IP信息
+
 
 	this.Data["regions"] = ""
 	this.Data["isp"] = ""

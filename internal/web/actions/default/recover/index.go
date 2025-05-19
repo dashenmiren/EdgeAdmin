@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package recovers
 
 import "github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"

@@ -109,7 +109,7 @@ func (this *UpdatePopupAction) RunPost(params struct {
 		"isOn":       params.IsOn,
 		"isUp":       isUp,
 		"thresholds": thresholds,
-		"clusters":   clusterMaps,
+		"clusters":    clusterMaps,
 	}
 
 	this.Success()

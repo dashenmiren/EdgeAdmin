@@ -94,11 +94,12 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	GroupId int64
 	SetId   int64
 
-	Name        string
-	RulesJSON   []byte
-	Connector   string
-	ActionsJSON []byte
-	IgnoreLocal bool
+	Name               string
+	RulesJSON          []byte
+	Connector          string
+	ActionsJSON        []byte
+	IgnoreLocal        bool
+	IgnoreSearchEngine bool
 
 	Must *actions.Must
 }) {
@@ -119,6 +120,7 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 
 	if len(params.RulesJSON) == 0 {
 		this.Fail("请添加至少一个规则")
+		return
 	}
 	var rules = []*firewallconfigs.HTTPFirewallRule{}
 	err = json.Unmarshal(params.RulesJSON, &rules)
@@ -128,6 +130,7 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	}
 	if len(rules) == 0 {
 		this.Fail("请添加至少一个规则")
+		return
 	}
 
 	var actionConfigs = []*firewallconfigs.HTTPFirewallActionConfig{}
@@ -140,6 +143,7 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	}
 	if len(actionConfigs) == 0 {
 		this.Fail("请添加至少一个动作")
+		return
 	}
 
 	setConfig.Name = params.Name
@@ -147,6 +151,7 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	setConfig.Rules = rules
 	setConfig.Actions = actionConfigs
 	setConfig.IgnoreLocal = params.IgnoreLocal
+	setConfig.IgnoreSearchEngine = params.IgnoreSearchEngine
 
 	setConfigJSON, err := json.Marshal(setConfig)
 	if err != nil {
@@ -155,10 +160,6 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().HTTPFirewallRuleSetRPC().CreateOrUpdateHTTPFirewallRuleSetFromConfig(this.AdminContext(), &pb.CreateOrUpdateHTTPFirewallRuleSetFromConfigRequest{FirewallRuleSetConfigJSON: setConfigJSON})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
 	if err != nil {
 		this.ErrorPage(err)
 		return

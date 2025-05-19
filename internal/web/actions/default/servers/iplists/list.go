@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package iplists
 
 import "github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
@@ -10,7 +12,7 @@ func (this *ListAction) Init() {
 	this.Nav("", "", "list")
 }
 
-func (this *ListAction) RunGet(params struct {
+func (this *ListAction) RunGet(params struct{
 	ListId int64
 }) {
 	err := InitIPList(this.Parent(), params.ListId)

@@ -39,6 +39,7 @@ func init() {
 			Post("/updateSetOn", new(UpdateSetOnAction)).
 			Post("/deleteSet", new(DeleteSetAction)).
 			GetPost("/updateSetPopup", new(UpdateSetPopupAction)).
+			Get("/setCodePopup", new(SetCodePopupAction)).
 			Post("/count", new(CountAction)).
 			Get("/selectPopup", new(SelectPopupAction)).
 			Post("/testRegexp", new(TestRegexpAction)).
@@ -46,6 +47,7 @@ func init() {
 			// IP管理
 			GetPost("/ipadmin", new(ipadmin.IndexAction)).
 			GetPost("/ipadmin/provinces", new(ipadmin.ProvincesAction)).
+			GetPost("/ipadmin/providers", new(ipadmin.ProvidersAction)).
 			Get("/ipadmin/lists", new(ipadmin.ListsAction)).
 			GetPost("/ipadmin/updateIPPopup", new(ipadmin.UpdateIPPopupAction)).
 			Post("/ipadmin/deleteIP", new(ipadmin.DeleteIPAction)).

@@ -8,6 +8,13 @@
     </div>
 </div>
 
+<!-- XFF设置提示 -->
+<div class="ui message warning" v-if="teaXFFPrompt">
+    检测到你正在使用反向代理访问当前系统，如果你的系统确定在一个反向代理服务的上游，为了系统的正常运行，请在安全设置中设置“自定义客户端IP报头”。
+    <a href="/settings/security?showAll=1#client-header-names">[去设置]</a> &nbsp; &nbsp;
+    <a href="" @click.prevent="dismissXFFPrompt">[关闭提示]</a>
+</div>
+
 <!-- 没有节点提醒 -->
 <div class="ui icon message warning" v-if="!isLoading && dashboard.defaultClusterId > 0 && dashboard.countNodes == 0">
     <i class="icon warning circle"></i>
@@ -43,7 +50,7 @@
     <a href="" title="关闭" @click.prevent="closeMessage"><i class="ui icon remove small"></i></a>
 </div>
 
-<!-- 没有磁盘空间提醒 -->
+<!-- 没有硬盘空间提醒 -->
 <div class="ui icon message error" v-if="!isLoading && dashboard.diskUsageWarning != null && dashboard.diskUsageWarning.length > 0">
     <i class="icon warning circle"></i>
     <span v-html="dashboard.diskUsageWarning" style="line-height: 1.8"></span>
@@ -71,7 +78,7 @@
         </div>
     </div>
 
-    <div class="ui column with-border">
+    <div class="ui column">
         <h4>API节点<link-icon href="/settings/api" v-if="dashboard.canGoSettings"></link-icon></h4>
         <div class="value"><span>{{dashboard.countAPINodes}}</span>个
             <span style="font-size: 1em" v-if="dashboard.countOfflineAPINodes > 0">/ <a href="/settings/api" v-if="dashboard.canGoSettings"><span class="red" style="font-size: 1em">{{dashboard.countOfflineAPINodes}}离线</span></a><span class="red" style="font-size: 1em" v-else>{{dashboard.countOfflineAPINodes}}离线</span></span>
@@ -88,10 +95,19 @@
         <div class="value"><span>{{dashboard.countServers}}</span>个</div>
     </div>
 
-    <div class="ui column with-border">
-        <h4>今日流量</h4>
+    <div class="ui column">
+        <h4>当天独立IP</h4>
+        <div class="value">
+            <span v-if="todayCountIPs > 0">{{todayCountIPsFormat}}</span>
+            <span v-else class="disabled">尚无数据</span>
+        </div>
+    </div>
+
+    <div class="ui column">
+        <h4>当天流量</h4>
         <div class="value"><span>{{todayTraffic}}</span>{{todayTrafficUnit}}</div>
     </div>
+
 </columns-grid>
 
 <chart-columns-grid>

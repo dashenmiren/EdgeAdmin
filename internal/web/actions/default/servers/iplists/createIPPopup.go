@@ -1,12 +1,10 @@
 package iplists
 
 import (
-	"net"
 	"strings"
 
 	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/configutils"
 	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
@@ -51,9 +49,7 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 	ListId int64
 	Method string
 
-	IpFrom string
-	IpTo   string
-
+	Value  string
 	IpData string
 
 	ExpiredAt  int64
@@ -65,7 +61,7 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 	CSRF *actionutils.CSRF
 }) {
 	// 校验IPList
-	if params.ListId != firewallconfigs.GlobalListId {
+	if !firewallconfigs.IsGlobalListId(params.ListId) {
 		existsResp, err := this.RPC().IPListRPC().ExistsEnabledIPList(this.AdminContext(), &pb.ExistsEnabledIPListRequest{IpListId: params.ListId})
 		if err != nil {
 			this.ErrorPage(err)
@@ -77,33 +73,24 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 	}
 
 	type ipData struct {
+		value  string
 		ipFrom string
 		ipTo   string
 	}
 
 	var batchIPs = []*ipData{}
 	switch params.Type {
-	case "ipv4":
+	case "ip":
 		if params.Method == "single" {
-			// 校验IP格式（ipFrom/ipTo）
+			// 校验IP格式
 			params.Must.
-				Field("ipFrom", params.IpFrom).
-				Require("请输入开始IP")
+				Field("value", params.Value).
+				Require("请输入IP或IP段")
 
-			var ipFromLong uint64
-			if !utils.IsIPv4(params.IpFrom) {
-				this.Fail("请输入正确的开始IP")
-			}
-			ipFromLong = utils.IP2Long(params.IpFrom)
-
-			var ipToLong uint64
-			if len(params.IpTo) > 0 && !utils.IsIPv4(params.IpTo) {
-				this.Fail("请输入正确的结束IP")
-			}
-			ipToLong = utils.IP2Long(params.IpTo)
-
-			if ipFromLong > 0 && ipToLong > 0 && ipFromLong > ipToLong {
-				params.IpTo, params.IpFrom = params.IpFrom, params.IpTo
+			_, _, _, ok := utils.ParseIPValue(params.Value)
+			if !ok {
+				this.FailField("value", "请输入正确的IP格式")
+				return
 			}
 		} else if params.Method == "batch" {
 			if len(params.IpData) == 0 {
@@ -112,137 +99,30 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 			var lines = strings.Split(params.IpData, "\n")
 			for index, line := range lines {
 				line = strings.TrimSpace(line)
-				if strings.Contains(line, "/") { // CIDR
-					if strings.Contains(line, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					ipFrom, ipTo, err := configutils.ParseCIDR(line)
-					if err != nil {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if strings.Contains(line, "-") { // IP Range
-					var pieces = strings.Split(line, "-")
-					var ipFrom = strings.TrimSpace(pieces[0])
-					var ipTo = strings.TrimSpace(pieces[1])
-
-					if net.ParseIP(ipFrom) == nil || net.ParseIP(ipTo) == nil || strings.Contains(ipFrom, ":") || strings.Contains(ipTo, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					if utils.IP2Long(ipFrom) > utils.IP2Long(ipTo) {
-						ipFrom, ipTo = ipTo, ipFrom
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if strings.Contains(line, ",") { // IP Range
-					var pieces = strings.Split(line, ",")
-					var ipFrom = strings.TrimSpace(pieces[0])
-					var ipTo = strings.TrimSpace(pieces[1])
-
-					if net.ParseIP(ipFrom) == nil || net.ParseIP(ipTo) == nil || strings.Contains(ipFrom, ":") || strings.Contains(ipTo, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					if utils.IP2Long(ipFrom) > utils.IP2Long(ipTo) {
-						ipFrom, ipTo = ipTo, ipFrom
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if len(line) > 0 {
-					var ipFrom = line
-					if net.ParseIP(ipFrom) == nil || strings.Contains(ipFrom, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-					})
+				if len(line) == 0 {
+					continue
 				}
-			}
-		}
-	case "ipv6":
-		if params.Method == "single" {
-			params.Must.
-				Field("ipFrom", params.IpFrom).
-				Require("请输入IP")
-
-			// 校验IP格式（ipFrom）
-			if !utils.IsIPv6(params.IpFrom) {
-				this.Fail("请输入正确的IPv6地址")
-			}
-		} else if params.Method == "batch" {
-			if len(params.IpData) == 0 {
-				this.FailField("ipData", "请输入IP")
-			}
-			var lines = strings.Split(params.IpData, "\n")
-			for index, line := range lines {
-				line = strings.TrimSpace(line)
-				if strings.Contains(line, "/") { // CIDR
-					if !strings.Contains(line, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					ipFrom, ipTo, err := configutils.ParseCIDR(line)
-					if err != nil {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if strings.Contains(line, "-") { // IP Range
-					var pieces = strings.Split(line, "-")
-					var ipFrom = strings.TrimSpace(pieces[0])
-					var ipTo = strings.TrimSpace(pieces[1])
-
-					if net.ParseIP(ipFrom) == nil || net.ParseIP(ipTo) == nil || !strings.Contains(ipFrom, ":") || !strings.Contains(ipTo, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					if utils.IP2Long(ipFrom) > utils.IP2Long(ipTo) {
-						ipFrom, ipTo = ipTo, ipFrom
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if strings.Contains(line, ",") { // IP Range
-					var pieces = strings.Split(line, ",")
-					var ipFrom = strings.TrimSpace(pieces[0])
-					var ipTo = strings.TrimSpace(pieces[1])
-
-					if net.ParseIP(ipFrom) == nil || net.ParseIP(ipTo) == nil || !strings.Contains(ipFrom, ":") || !strings.Contains(ipTo, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					if utils.IP2Long(ipFrom) > utils.IP2Long(ipTo) {
-						ipFrom, ipTo = ipTo, ipFrom
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-						ipTo:   ipTo,
-					})
-				} else if len(line) > 0 {
-					var ipFrom = line
-					if net.ParseIP(ipFrom) == nil || !strings.Contains(ipFrom, ":") {
-						this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
-					}
-					batchIPs = append(batchIPs, &ipData{
-						ipFrom: ipFrom,
-					})
+				_, ipFrom, ipTo, ok := utils.ParseIPValue(line)
+				if !ok {
+					this.FailField("ipData", "第"+types.String(index+1)+"行IP格式错误："+line)
+					return
 				}
+				batchIPs = append(batchIPs, &ipData{
+					value:  line,
+					ipFrom: ipFrom,
+					ipTo:   ipTo,
+				})
 			}
 		}
 	case "all":
-		params.IpFrom = "0.0.0.0"
+		params.Value = "0.0.0.0"
 	}
 
 	if len(batchIPs) > 0 {
 		for _, ip := range batchIPs {
 			_, err := this.RPC().IPItemRPC().CreateIPItem(this.AdminContext(), &pb.CreateIPItemRequest{
 				IpListId:   params.ListId,
+				Value:      ip.value,
 				IpFrom:     ip.ipFrom,
 				IpTo:       ip.ipTo,
 				ExpiredAt:  params.ExpiredAt,
@@ -261,8 +141,7 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 	} else {
 		createResp, err := this.RPC().IPItemRPC().CreateIPItem(this.AdminContext(), &pb.CreateIPItemRequest{
 			IpListId:   params.ListId,
-			IpFrom:     params.IpFrom,
-			IpTo:       params.IpTo,
+			Value:      params.Value,
 			ExpiredAt:  params.ExpiredAt,
 			Reason:     params.Reason,
 			Type:       params.Type,

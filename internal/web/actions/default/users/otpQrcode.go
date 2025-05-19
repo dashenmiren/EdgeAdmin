@@ -3,10 +3,11 @@ package users
 import (
 	"encoding/json"
 
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils/otputils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 	"github.com/skip2/go-qrcode"
 	"github.com/xlzd/gotp"
 )
@@ -20,7 +21,8 @@ func (this *OtpQrcodeAction) Init() {
 }
 
 func (this *OtpQrcodeAction) RunGet(params struct {
-	UserId int64
+	UserId   int64
+	Download bool
 }) {
 	loginResp, err := this.RPC().LoginRPC().FindEnabledLogin(this.AdminContext(), &pb.FindEnabledLoginRequest{
 		UserId: params.UserId,
@@ -30,19 +32,19 @@ func (this *OtpQrcodeAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	login := loginResp.Login
+	var login = loginResp.Login
 	if login == nil || !login.IsOn {
 		this.NotFound("userLogin", params.UserId)
 		return
 	}
 
-	loginParams := maps.Map{}
+	var loginParams = maps.Map{}
 	err = json.Unmarshal(login.ParamsJSON, &loginParams)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	secret := loginParams.GetString("secret")
+	var secret = loginParams.GetString("secret")
 
 	// 当前用户信息
 	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
@@ -56,21 +58,22 @@ func (this *OtpQrcodeAction) RunGet(params struct {
 		return
 	}
 
-	uiConfig, err := configloaders.LoadAdminUIConfig()
+	productName, err := this.findProductName()
 	if err != nil {
 		this.ErrorPage(err)
 		return
-	}
-	var productName = uiConfig.ProductName
-	if len(productName) == 0 {
-		productName = "Go用户"
 	}
 	var url = gotp.NewDefaultTOTP(secret).ProvisioningUri(user.Username, productName)
-	data, err := qrcode.Encode(url, qrcode.Medium, 256)
+	data, err := qrcode.Encode(otputils.FixIssuer(url), qrcode.Medium, 256)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+	if params.Download {
+		var filename = "OTP-USER-" + user.Username + ".png"
+		this.AddHeader("Content-Disposition", "attachment; filename=\""+filename+"\";")
+	}
 	this.AddHeader("Content-Type", "image/png")
+	this.AddHeader("Content-Length", types.String(len(data)))
 	_, _ = this.Write(data)
 }

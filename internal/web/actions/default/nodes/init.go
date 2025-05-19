@@ -18,6 +18,7 @@ func init() {
 			// IP地址
 			GetPost("/ipAddresses/createPopup", new(ipAddresses.CreatePopupAction)).
 			GetPost("/ipAddresses/updatePopup", new(ipAddresses.UpdatePopupAction)).
+
 			EndAll()
 	})
 }

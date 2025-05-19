@@ -18,6 +18,7 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			Post("/deleteBatch", new(DeleteBatchAction)).
 			Post("/deleteAll", new(DeleteAllAction)).
+
 			EndAll()
 	})
 }

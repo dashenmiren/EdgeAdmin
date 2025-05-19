@@ -33,6 +33,7 @@ func (this *UpdateIPPopupAction) RunGet(params struct {
 
 	this.Data["item"] = maps.Map{
 		"id":         item.Id,
+		"value":      item.Value,
 		"ipFrom":     item.IpFrom,
 		"ipTo":       item.IpTo,
 		"expiredAt":  item.ExpiredAt,
@@ -49,8 +50,7 @@ func (this *UpdateIPPopupAction) RunGet(params struct {
 func (this *UpdateIPPopupAction) RunPost(params struct {
 	ItemId int64
 
-	IpFrom     string
-	IpTo       string
+	Value      string
 	ExpiredAt  int64
 	Reason     string
 	Type       string
@@ -62,47 +62,25 @@ func (this *UpdateIPPopupAction) RunPost(params struct {
 	// 日志
 	defer this.CreateLogInfo(codes.IPItem_LogUpdateIPItem, params.ItemId)
 
-	// TODO 校验ItemId所属用户
-
 	switch params.Type {
-	case "ipv4":
+	case "ip":
+		// 校验IP格式
 		params.Must.
-			Field("ipFrom", params.IpFrom).
-			Require("请输入开始IP")
+			Field("value", params.Value).
+			Require("请输入IP或IP段")
 
-		// 校验IP格式（ipFrom/ipTo）
-		var ipFromLong uint64
-		if !utils.IsIPv4(params.IpFrom) {
-			this.Fail("请输入正确的开始IP")
-		}
-		ipFromLong = utils.IP2Long(params.IpFrom)
-
-		var ipToLong uint64
-		if len(params.IpTo) > 0 && !utils.IsIPv4(params.IpTo) {
-			this.Fail("请输入正确的结束IP")
-		}
-		ipToLong = utils.IP2Long(params.IpTo)
-
-		if ipFromLong > 0 && ipToLong > 0 && ipFromLong > ipToLong {
-			params.IpTo, params.IpFrom = params.IpFrom, params.IpTo
-		}
-	case "ipv6":
-		params.Must.
-			Field("ipFrom", params.IpFrom).
-			Require("请输入IP")
-
-		// 校验IP格式（ipFrom）
-		if !utils.IsIPv6(params.IpFrom) {
-			this.Fail("请输入正确的IPv6地址")
+		_, _, _, ok := utils.ParseIPValue(params.Value)
+		if !ok {
+			this.FailField("value", "请输入正确的IP格式")
+			return
 		}
 	case "all":
-		params.IpFrom = "0.0.0.0"
+		params.Value = "0.0.0.0"
 	}
 
 	_, err := this.RPC().IPItemRPC().UpdateIPItem(this.AdminContext(), &pb.UpdateIPItemRequest{
 		IpItemId:   params.ItemId,
-		IpFrom:     params.IpFrom,
-		IpTo:       params.IpTo,
+		Value:      params.Value,
 		ExpiredAt:  params.ExpiredAt,
 		Reason:     params.Reason,
 		Type:       params.Type,

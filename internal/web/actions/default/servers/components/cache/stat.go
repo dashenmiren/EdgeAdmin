@@ -75,7 +75,7 @@ func (this *StatAction) RunPost(params struct {
 	msg := &messageconfigs.StatCacheMessage{
 		CachePolicyJSON: cachePolicyJSON,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeStatCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeStatCache, msg, 10, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

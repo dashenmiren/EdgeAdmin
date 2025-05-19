@@ -18,7 +18,9 @@ Vue.component("user-agent-config-box", {
 			addingFilter: {
 				keywords: [],
 				action: "deny"
-			}
+			},
+			moreOptionsVisible: false,
+			batchKeywords: ""
 		}
 	},
 	methods: {
@@ -33,6 +35,10 @@ Vue.component("user-agent-config-box", {
 		},
 		add: function () {
 			this.isAdding = true
+			let that = this
+			setTimeout(function () {
+				that.$refs.batchKeywords.focus()
+			})
 		},
 		confirm: function () {
 			if (this.addingFilter.action == "deny") {
@@ -60,9 +66,21 @@ Vue.component("user-agent-config-box", {
 				keywords: [],
 				action: "deny"
 			}
+			this.batchKeywords = ""
 		},
 		changeKeywords: function (keywords) {
-			this.addingFilter.keywords = keywords
+			let arr = keywords.split(/\n/)
+			let resultKeywords = []
+			arr.forEach(function (keyword){
+				keyword = keyword.trim()
+				if (!resultKeywords.$contains(keyword)) {
+					resultKeywords.push(keyword)
+				}
+			})
+			this.addingFilter.keywords = resultKeywords
+		},
+		showMoreOptions: function () {
+			this.moreOptionsVisible = !this.moreOptionsVisible
 		}
 	},
 	template: `<div>
@@ -115,8 +133,8 @@ Vue.component("user-agent-config-box", {
 							<tr>
 								<td class="title">UA关键词</td>
 								<td>
-									<values-box :v-values="addingFilter.keywords" :v-allow-empty="true" @change="changeKeywords"></values-box>
-									<p class="comment">不区分大小写，比如<code-label>Chrome</code-label>；支持<code-label>*</code-label>通配符，比如<code-label>*Firefox*</code-label>；也支持空的关键词，表示空UserAgent。</p>
+									<textarea v-model="batchKeywords" @input="changeKeywords(batchKeywords)" ref="batchKeywords" style="width: 20em" placeholder="*浏览器标识*"></textarea>
+									<p class="comment">每行一个关键词；不区分大小写，比如<code-label>Chrome</code-label>；支持<code-label>*</code-label>通配符，比如<code-label>*Firefox*</code-label>；也支持空行关键词，表示空UserAgent。</p>
 								</td>
 							</tr>
 							<tr>
@@ -133,6 +151,25 @@ Vue.component("user-agent-config-box", {
 					<div v-show="!isAdding" style="margin-top: 0.5em">
 						<button class="ui button tiny" type="button" @click.prevent="add">+</button>
 					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><more-options-indicator @change="showMoreOptions"></more-options-indicator></td>
+			</tr>
+		</tbody>
+		<tbody v-show="moreOptionsVisible && isOn()">
+			<tr>
+				<td>例外URL</td>
+				<td>
+					<url-patterns-box v-model="config.exceptURLPatterns"></url-patterns-box>
+					<p class="comment">如果填写了例外URL，表示这些URL跳过不做处理。</p>
+				</td>
+			</tr>
+			<tr>
+				<td>限制URL</td>
+				<td>
+					<url-patterns-box v-model="config.onlyURLPatterns"></url-patterns-box>
+					<p class="comment">如果填写了限制URL，表示只对这些URL进行处理；如果不填则表示支持所有的URL。</p>
 				</td>
 			</tr>
 		</tbody>

@@ -41,7 +41,7 @@ func (this *TestReadAction) RunPost(params struct {
 		CachePolicyJSON: cachePolicyJSON,
 		Key:             params.Key,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeReadCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeReadCache, msg, 10, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

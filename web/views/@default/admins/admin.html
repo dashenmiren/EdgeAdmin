@@ -21,7 +21,7 @@
         </td>
     </tr>
     <tr>
-        <td>是否允许登录</td>
+        <td>允许登录</td>
         <td>
             <span class="green" v-if="admin.canLogin">Y</span>
             <span class="disabled" v-else>N</span>
@@ -30,7 +30,7 @@
         </td>
     </tr>
     <tr>
-        <td>是否为超级管理员</td>
+        <td>超级管理员</td>
         <td>
             <span v-if="admin.isSuper" class="green">Y</span>
             <span v-else class="disabled">N</span>
@@ -64,8 +64,8 @@
     <tr v-if="otp != null && otp.isOn && moreOptionsVisible">
         <td>认证二维码</td>
         <td>
-            <img :src="'/admins/otpQrcode?adminId=' + admin.id"/>
-            <p class="comment">可以通过二维码快速添加OTP认证信息到认证App中。</p>
+            <img alt="qrcode" :src="'./otpQrcode?adminId=' + admin.id"/>
+            <p class="comment"><a :href="'./otpQrcode?adminId=' + admin.id + '&download=true'">[下载]</a> &nbsp; 可以通过二维码快速添加OTP认证信息到认证App中。</p>
         </td>
     </tr>
     <tr v-if="otp != null && otp.isOn && moreOptionsVisible">

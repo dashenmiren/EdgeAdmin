@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package gen
 
 import (
@@ -38,8 +40,11 @@ func generateComponentsJSFile() error {
 	} else {
 		webRoot = Tea.Root + "/web/public/js/components/"
 	}
+	gitDir, gDirFound := os.LookupEnv("GithubDIR")
+	if gDirFound {
+		webRoot = gitDir + "/EdgeAdmin/web/public/js/components/"
+	}
 	f := files.NewFile(webRoot)
-
 	f.Range(func(file *files.File) {
 		if !file.IsFile() {
 			return
@@ -52,6 +57,7 @@ func generateComponentsJSFile() error {
 			logs.Error(err)
 			return
 		}
+
 		buffer.Write(data)
 		buffer.Write([]byte{'\n', '\n'})
 	})
@@ -154,7 +160,12 @@ func generateComponentsJSFile() error {
 		buffer.Write([]byte{';', '\n', '\n'})
 	}
 
-	fp, err := os.OpenFile(filepath.Clean(Tea.PublicFile("/js/components.src.js")), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
+	pubPath := Tea.PublicFile("/js/components.src.js")
+	if gDirFound {
+		pubPath = gitDir + "/EdgeAdmin/web/public/js/components.src.js"
+	}
+
+	fp, err := os.OpenFile(filepath.Clean(pubPath), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
 	if err != nil {
 		return err
 	}

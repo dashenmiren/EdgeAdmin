@@ -14,6 +14,8 @@ func init() {
 			GetPost("/addPopup", new(AddPopupAction)).
 			Post("/delete", new(DeleteAction)).
 			GetPost("/updatePopup", new(UpdatePopupAction)).
+			Post("/updateIsOn", new(UpdateIsOnAction)).
+			Post("/detectHTTPS", new(DetectHTTPSAction)).
 			EndAll()
 	})
 }

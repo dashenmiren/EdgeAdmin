@@ -292,7 +292,7 @@ func (this *NodesAction) RunGet(params struct {
 			groupMaps = append([]maps.Map{
 				{
 					"id":         -1,
-					"name":       "[" + this.Lang(codes.Node_UngroupedLabel) + "](" + types.String(countUngroupNodes) + ")",
+					"name":       "[" + this.Lang(codes.Node_UngroupedLabel)+ "](" + types.String(countUngroupNodes) + ")",
 					"countNodes": countUngroupNodes,
 				},
 			}, groupMaps...)

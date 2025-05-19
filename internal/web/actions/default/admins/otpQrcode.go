@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 
 	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils/otputils"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 	"github.com/skip2/go-qrcode"
 	"github.com/xlzd/gotp"
 )
@@ -20,7 +22,8 @@ func (this *OtpQrcodeAction) Init() {
 }
 
 func (this *OtpQrcodeAction) RunGet(params struct {
-	AdminId int64
+	AdminId  int64
+	Download bool
 }) {
 	loginResp, err := this.RPC().LoginRPC().FindEnabledLogin(this.AdminContext(), &pb.FindEnabledLoginRequest{
 		AdminId: params.AdminId,
@@ -30,19 +33,19 @@ func (this *OtpQrcodeAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	login := loginResp.Login
+	var login = loginResp.Login
 	if login == nil || !login.IsOn {
 		this.NotFound("adminLogin", params.AdminId)
 		return
 	}
 
-	loginParams := maps.Map{}
+	var loginParams = maps.Map{}
 	err = json.Unmarshal(login.ParamsJSON, &loginParams)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	secret := loginParams.GetString("secret")
+	var secret = loginParams.GetString("secret")
 
 	// 当前用户信息
 	adminResp, err := this.RPC().AdminRPC().FindEnabledAdmin(this.AdminContext(), &pb.FindEnabledAdminRequest{AdminId: params.AdminId})
@@ -50,7 +53,7 @@ func (this *OtpQrcodeAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	admin := adminResp.Admin
+	var admin = adminResp.Admin
 	if admin == nil {
 		this.NotFound("admin", params.AdminId)
 		return
@@ -61,12 +64,19 @@ func (this *OtpQrcodeAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	url := gotp.NewDefaultTOTP(secret).ProvisioningUri(admin.Username, uiConfig.AdminSystemName)
-	data, err := qrcode.Encode(url, qrcode.Medium, 256)
+	var url = gotp.NewDefaultTOTP(secret).ProvisioningUri(admin.Username, uiConfig.AdminSystemName)
+
+	data, err := qrcode.Encode(otputils.FixIssuer(url), qrcode.Medium, 256)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+
+	if params.Download {
+		var filename = "OTP-ADMIN-" + admin.Username + ".png"
+		this.AddHeader("Content-Disposition", "attachment; filename=\""+filename+"\";")
+	}
 	this.AddHeader("Content-Type", "image/png")
+	this.AddHeader("Content-Length", types.String(len(data)))
 	_, _ = this.Write(data)
 }

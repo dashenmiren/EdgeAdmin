@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package nodeutils
 
 import (
@@ -37,12 +39,13 @@ func InitNodeInfo(parentAction *actionutils.ParentAction, nodeId int64) (*pb.Nod
 	}
 
 	parentAction.Data["node"] = maps.Map{
-		"id":    node.Id,
-		"name":  node.Name,
-		"isOn":  node.IsOn,
-		"isUp":  node.IsUp,
-		"group": groupMap,
-		"level": node.Level,
+		"id":           node.Id,
+		"name":         node.Name,
+		"isOn":         node.IsOn,
+		"isUp":         node.IsUp,
+		"group":        groupMap,
+		"level":        node.Level,
+		"bypassMobile": node.BypassMobile,
 	}
 	var clusterId int64 = 0
 	if node.NodeCluster != nil {

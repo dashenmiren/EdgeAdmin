@@ -13,10 +13,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
 	"github.com/dashenmiren/EdgeAdmin/internal/configs"
 	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
 	"github.com/dashenmiren/EdgeAdmin/internal/events"
 	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeCommon/pkg/nodeconfigs"
 	"github.com/iwind/TeaGo"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/lists"
@@ -86,6 +88,9 @@ func (this *AdminNode) Run() {
 
 	// 启动API节点
 	this.startAPINode()
+
+	// 设置DNS相关
+	this.setupDNS()
 
 	// 启动IP库
 	this.startIPLibrary()
@@ -254,6 +259,33 @@ func (this *AdminNode) addPortsToFirewall() {
 	utils.AddPortsToFirewall(ports)
 }
 
+// 设置DNS相关
+func (this *AdminNode) setupDNS() {
+	config, loadErr := configloaders.LoadAdminUIConfig()
+	if loadErr != nil {
+		// 默认使用go原生
+		err := os.Setenv("GODEBUG", "netdns=go")
+		if err != nil {
+			logs.Println("[DNS_RESOLVER]set env failed: " + err.Error())
+		}
+		return
+	}
+
+	var err error
+	switch config.DNSResolver.Type {
+	case nodeconfigs.DNSResolverTypeGoNative:
+		err = os.Setenv("GODEBUG", "netdns=go")
+	case nodeconfigs.DNSResolverTypeCGO:
+		err = os.Setenv("GODEBUG", "netdns=cgo")
+	default:
+		// 默认使用go原生
+		err = os.Setenv("GODEBUG", "netdns=go")
+	}
+	if err != nil {
+		logs.Println("[DNS_RESOLVER]set env failed: " + err.Error())
+	}
+}
+
 // 启动API节点
 func (this *AdminNode) startAPINode() {
 	var configPath = Tea.Root + "/edge-api/configs/api.yaml"
@@ -406,6 +438,10 @@ func (this *AdminNode) listenSock() error {
 				_ = cmd.ReplyOk()
 			case "prod": // 切换到prod
 				Tea.Env = Tea.EnvProd
+				_ = cmd.ReplyOk()
+			case "security.reset":
+				var newConfig = configloaders.NewSecurityConfig()
+				_ = configloaders.UpdateSecurityConfig(newConfig)
 				_ = cmd.ReplyOk()
 			}
 		})

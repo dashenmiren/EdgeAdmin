@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package group
 
 import (
@@ -104,14 +106,6 @@ func (this *IndexAction) RunGet(params struct {
 				portMaps = append(portMaps, maps.Map{
 					"protocol":  listen.Protocol,
 					"portRange": listen.PortRange,
-				})
-			}
-		}
-		if config.Unix != nil && config.Unix.IsOn {
-			for _, listen := range config.Unix.Listen {
-				portMaps = append(portMaps, maps.Map{
-					"protocol":  listen.Protocol,
-					"portRange": listen.Host,
 				})
 			}
 		}

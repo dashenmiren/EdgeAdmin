@@ -120,6 +120,7 @@ func (this *CreateAction) RunPost(params struct {
 			Domains:       realDomains,
 			AutoRenew:     params.AutoRenew,
 			AuthURL:       params.AuthURL,
+			Async:         false,
 		})
 		if err != nil {
 			this.ErrorPage(err)

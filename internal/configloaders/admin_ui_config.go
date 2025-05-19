@@ -94,6 +94,7 @@ func loadAdminUIConfig() (*systemconfigs.AdminUIConfig, error) {
 	}
 
 	var config = &systemconfigs.AdminUIConfig{}
+	config.DNSResolver.Type = nodeconfigs.DNSResolverTypeDefault // 默认值
 	err = json.Unmarshal(resp.ValueJSON, config)
 	if err != nil {
 		logs.Println("[UI_MANAGER]" + err.Error())
@@ -109,7 +110,7 @@ func loadAdminUIConfig() (*systemconfigs.AdminUIConfig, error) {
 }
 
 func defaultAdminUIConfig() *systemconfigs.AdminUIConfig {
-	return &systemconfigs.AdminUIConfig{
+	var config = &systemconfigs.AdminUIConfig{
 		ProductName:        langs.DefaultMessage(codes.AdminUI_DefaultProductName),
 		AdminSystemName:    langs.DefaultMessage(codes.AdminUI_DefaultSystemName),
 		ShowOpenSourceInfo: true,
@@ -118,6 +119,8 @@ func defaultAdminUIConfig() *systemconfigs.AdminUIConfig {
 		DefaultPageSize:    10,
 		TimeZone:           nodeconfigs.DefaultTimeZoneLocation,
 	}
+	config.DNSResolver.Type = nodeconfigs.DNSResolverTypeDefault
+	return config
 }
 
 // 修改时区

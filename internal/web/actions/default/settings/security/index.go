@@ -20,7 +20,11 @@ func (this *IndexAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *IndexAction) RunGet(params struct{}) {
+func (this *IndexAction) RunGet(params struct {
+	ShowAll bool
+}) {
+	this.Data["showAll"] = params.ShowAll
+
 	config, err := configloaders.LoadSecurityConfig()
 	if err != nil {
 		this.ErrorPage(err)
@@ -67,6 +71,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	this.Data["provinces"] = provinceMaps
 
 	this.Data["config"] = config
+
 	this.Show()
 }
 
@@ -79,6 +84,7 @@ func (this *IndexAction) RunPost(params struct {
 	AllowRememberLogin bool
 
 	ClientIPHeaderNames string
+	ClientIPHeaderOnly  bool
 
 	DenySearchEngines bool
 	DenySpiders       bool
@@ -142,6 +148,7 @@ func (this *IndexAction) RunPost(params struct {
 
 	// 客户端IP获取方式
 	config.ClientIPHeaderNames = params.ClientIPHeaderNames
+	config.ClientIPHeaderOnly = params.ClientIPHeaderOnly
 
 	// 禁止搜索引擎和爬虫
 	config.DenySearchEngines = params.DenySearchEngines

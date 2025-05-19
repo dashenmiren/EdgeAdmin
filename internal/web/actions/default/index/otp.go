@@ -1,3 +1,5 @@
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+
 package index
 
 import (
@@ -19,6 +21,7 @@ import (
 	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/rands"
 	stringutil "github.com/iwind/TeaGo/utils/string"
 	"github.com/xlzd/gotp"
 )
@@ -42,7 +45,7 @@ func (this *OtpAction) RunGet(params struct {
 		return
 	}
 
-	//// 是否新安装
+	// // 是否新安装
 	if setup.IsNewInstalled() {
 		this.RedirectURL("/setup/confirm")
 		return
@@ -131,7 +134,10 @@ func (this *OtpAction) RunPost(params struct {
 	}
 
 	// 写入SESSION
-	params.Auth.StoreAdmin(adminId, params.Remember)
+	var localSid = rands.HexString(32)
+	this.Data["localSid"] = localSid
+	this.Data["ip"] = loginutils.RemoteIP(&this.ActionObject)
+	params.Auth.StoreAdmin(adminId, params.Remember, localSid)
 
 	// 删除OTP SESSION
 	_, err = this.RPC().LoginSessionRPC().DeleteLoginSession(this.AdminContext(), &pb.DeleteLoginSessionRequest{Sid: sid})

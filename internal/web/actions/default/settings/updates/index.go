@@ -1,3 +1,5 @@
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+
 package updates
 
 import (
@@ -32,7 +34,8 @@ func (this *IndexAction) RunGet(params struct {
 
 	// 是否正在升级
 	this.Data["isUpgrading"] = isUpgrading
-	this.Data["upgradeProgress"] = fmt.Sprintf("%.2f", upgradeProgress*100)
+	this.Data["isUpgradingDB"] = isUpgradingDB
+	this.Data["upgradeProgress"] = fmt.Sprintf("%.2f", upgradeProgress * 100)
 	if isUpgrading {
 		this.Data["doCheck"] = false
 	}

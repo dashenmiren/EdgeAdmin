@@ -17,27 +17,27 @@
                 <span v-if="item.type == 'all'">所有IP</span>
 
                 <p class="comment" v-if="type == 'ipv4'">单个IPv4或一个IPv4范围。</p>
-                <p class="comment" v-if="type == 'ipv6'">单个IPv6。</p>
+                <p class="comment" v-if="type == 'ipv6'">单个IPv6或一个IPv6范围。</p>
                 <p class="comment" v-if="type == 'all'">允许或禁用所有的IP。</p>
             </td>
         </tr>
 
-        <!-- IPv4 -->
-        <tbody v-if="type == 'ipv4'">
-        <tr>
-            <td>开始IP *</td>
-            <td>
-                <input type="text" name="ipFrom" maxlength="64" placeholder="x.x.x.x" ref="focus" v-model="item.ipFrom"/>
-            </td>
-        </tr>
-        <tr>
-            <td>结束IP</td>
-            <td>
-                <input type="text" name="ipTo" maxlength="64" placeholder="x.x.x.x" v-model="item.ipTo"/>
-                <p class="comment">表示IP段的时候需要填写此项。</p>
-            </td>
-        </tr>
+        <tbody v-if="type != 'all'">
+            <tr>
+                <td>IP或IP段 *</td>
+                <td>
+                    <input type="text" name="value" maxlength="64" placeholder="x.x.x.x" ref="focus" v-model="item.value" style="width: 20em"/>
+                </td>
+            </tr>
         </tbody>
+
+        <tr>
+            <td>过期时间</td>
+            <td>
+                <datetime-input :v-name="'expiredAt'" :v-timestamp="item.expiredAt"></datetime-input>
+                <p class="comment">在加入名单某一段时间后会失效，留空表示永久有效。</p>
+            </td>
+        </tr>
 
         <tr>
             <td>级别</td>
@@ -46,27 +46,10 @@
             </td>
         </tr>
 
-        <!-- IPv6 -->
-        <tbody v-if="type == 'ipv6'">
         <tr>
-            <td>IP *</td>
-            <td>
-                <input type="text" name="ipFrom" maxlength="64" placeholder="x:x:x:x:x:x:x:x" ref="focus" v-model="item.ipFrom"/>
-                <p class="comment">IPv6地址，比如 1406:3c00:0:2409:13:58:103:15</p>
-            </td>
-        </tr>
-        </tbody>
-		<tr>
 			<td colspan="2"><more-options-indicator></more-options-indicator></td>
 		</tr>
 		<tbody v-show="moreOptionsVisible">
-			<tr>
-				<td>过期时间</td>
-				<td>
-					<datetime-input :v-name="'expiredAt'" :v-timestamp="item.expiredAt"></datetime-input>
-					<p class="comment">在加入名单某一段时间后会失效，留空表示永久有效。</p>
-				</td>
-			</tr>
 			<tr>
 				<td>备注</td>
 				<td><input type="text" name="reason" maxlength="100" v-model="item.reason"/></td>
