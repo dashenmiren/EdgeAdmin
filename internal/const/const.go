@@ -18,5 +18,5 @@ const (
 	SessionAdminId = "adminId"
 
 	SystemdServiceName = "edge-admin"
-	UpdatesURL         = "https://goedge.cn/api/boot/versions?os=${os}&arch=${arch}&version=${version}"
+	UpdatesURL         = "https://cdn.foyeseo.com/api/boot/versions?os=${os}&arch=${arch}&version=${version}"
 )

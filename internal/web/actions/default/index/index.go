@@ -28,8 +28,6 @@ import (
 	"time"
 )
 
-const regionDenyMessage = "当前软件系统暂时不为你所在的区域提供服务。"
-
 type IndexAction struct {
 	actionutils.ParentAction
 }
@@ -44,10 +42,6 @@ func (this *IndexAction) RunGet(params struct {
 
 	Auth *helpers.UserShouldAuth
 }) {
-	if !this.checkRegion() {
-		this.WriteString(regionDenyMessage)
-		return
-	}
 
 	// 是否自动从HTTP跳转到HTTPS
 	if this.Request.TLS == nil {
@@ -151,10 +145,6 @@ func (this *IndexAction) RunPost(params struct {
 	Auth *helpers.UserShouldAuth
 	CSRF *actionutils.CSRF
 }) {
-	if !this.checkRegion() {
-		this.Fail(regionDenyMessage)
-		return
-	}
 
 	params.Must.
 		Field("username", params.Username).
