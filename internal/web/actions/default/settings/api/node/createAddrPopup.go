@@ -1,8 +1,8 @@
 package node
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"net"
 	"net/url"

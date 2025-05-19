@@ -3,8 +3,8 @@
 package db
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/db/dbnodeutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/db/dbnodeutils"
 	"github.com/iwind/TeaGo/maps"
 	"strings"
 )

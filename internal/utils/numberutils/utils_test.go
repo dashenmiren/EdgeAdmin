@@ -3,7 +3,7 @@
 package numberutils_test
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils/numberutils"
 	"github.com/iwind/TeaGo/assert"
 	"testing"
 )

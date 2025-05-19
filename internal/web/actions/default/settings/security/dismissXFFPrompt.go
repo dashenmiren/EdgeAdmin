@@ -3,8 +3,8 @@
 package security
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
 )
 
 type DismissXFFPromptAction struct {

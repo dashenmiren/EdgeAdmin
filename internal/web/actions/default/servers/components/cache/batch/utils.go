@@ -3,9 +3,9 @@
 package cache
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 )
 
 func InitMenu(parent *actionutils.ParentAction) error {

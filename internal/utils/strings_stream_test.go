@@ -3,7 +3,7 @@
 package utils_test
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 	"strings"
 	"testing"
 )

@@ -3,9 +3,9 @@ package nodeutils
 import (
 	"context"
 	"encoding/json"
-	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
-	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dashenmiren/EdgeAdmin/internal/configs"
+	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
+	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 	"sort"
 	"strconv"
 	"sync"

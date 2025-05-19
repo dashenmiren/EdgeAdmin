@@ -3,7 +3,7 @@
 package ui
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"net"
 	"strings"
 )

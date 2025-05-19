@@ -4,8 +4,8 @@ package updates
 
 import (
 	"fmt"
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
 	"os"
 	"os/exec"
 	"time"

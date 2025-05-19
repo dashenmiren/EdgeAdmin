@@ -3,7 +3,7 @@
 package apinodeutils_test
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils/apinodeutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils/apinodeutils"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"runtime"
 	"testing"

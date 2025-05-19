@@ -1,10 +1,10 @@
 package server
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	adminserverutils "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	adminserverutils "github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
+	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
 	"github.com/iwind/TeaGo/actions"
 	"net"
 )
