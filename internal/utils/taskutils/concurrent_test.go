@@ -1,11 +1,10 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package taskutils_test
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils/taskutils"
 	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils/taskutils"
 )
 
 func TestRunConcurrent(t *testing.T) {

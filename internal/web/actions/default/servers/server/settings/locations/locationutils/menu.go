@@ -1,10 +1,10 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 //go:build !plus
 
 package locationutils
 
 import (
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )

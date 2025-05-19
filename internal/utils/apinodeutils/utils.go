@@ -1,19 +1,18 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package apinodeutils
 
 import (
 	"bytes"
 	"errors"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/iwind/TeaGo/Tea"
+	stringutil "github.com/iwind/TeaGo/utils/string"
 	"os"
 	"os/exec"
 	"regexp"
 	"runtime"
 	"strings"
-
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/iwind/TeaGo/Tea"
-	stringutil "github.com/iwind/TeaGo/utils/string"
 )
 
 func CanUpgrade(apiVersion string, osName string, arch string) (canUpgrade bool, reason string) {

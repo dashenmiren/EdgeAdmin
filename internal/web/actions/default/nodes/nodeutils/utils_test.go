@@ -1,11 +1,10 @@
 package nodeutils
 
 import (
-	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"github.com/iwind/TeaGo/logs"
+	"testing"
 )
 
 func TestSendMessageToCluster(t *testing.T) {
@@ -15,7 +14,7 @@ func TestSendMessageToCluster(t *testing.T) {
 	}
 	ctx := rpcClient.Context(1)
 
-	results, err := SendMessageToCluster(ctx, 1, "test", nil, 30, false)
+	results, err := SendMessageToCluster(ctx, 1, "test", nil, 30)
 	if err != nil {
 		t.Fatal(err)
 	}

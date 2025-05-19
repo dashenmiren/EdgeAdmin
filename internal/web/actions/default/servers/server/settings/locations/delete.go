@@ -2,10 +2,9 @@ package locations
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
 type DeleteAction struct {

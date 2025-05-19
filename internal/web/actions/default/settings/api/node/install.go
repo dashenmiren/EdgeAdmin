@@ -1,12 +1,11 @@
 package node
 
 import (
-	"os"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/maps"
+	"os"
 )
 
 type InstallAction struct {
@@ -26,7 +25,7 @@ func (this *InstallAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var node = nodeResp.ApiNode
+	node := nodeResp.ApiNode
 	if node == nil {
 		this.NotFound("apiNode", params.NodeId)
 		return
@@ -40,12 +39,12 @@ func (this *InstallAction) RunGet(params struct {
 	}
 
 	// 数据库配置
-	var dbConfigMap = maps.Map{
+	dbConfigMap := maps.Map{
 		"config":     "",
 		"error":      "",
 		"isNotFound": false,
 	}
-	var dbConfigFile = Tea.ConfigFile("api_db.yaml")
+	dbConfigFile := Tea.ConfigFile("api_db.yaml")
 	data, err := os.ReadFile(dbConfigFile)
 	dbConfigMap["config"] = string(data)
 	if err != nil {

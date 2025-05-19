@@ -1,11 +1,11 @@
-// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package servers
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
 // DeleteServersAction 删除一组网站

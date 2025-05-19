@@ -2,13 +2,12 @@ package cache
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -38,12 +37,11 @@ func (this *CreatePopupAction) RunPost(params struct {
 	FileEnableSendfile     bool
 	FileMinFreeSizeJSON    []byte
 
-	CapacityJSON                   []byte
-	MaxSizeJSON                    []byte
-	FetchTimeoutJSON               []byte
-	SyncCompressionCache           bool
-	EnableMMAP                     bool
-	EnableIncompletePartialContent bool
+	CapacityJSON         []byte
+	MaxSizeJSON          []byte
+	FetchTimeoutJSON     []byte
+	SyncCompressionCache bool
+	EnableMMAP           bool
 
 	Description string
 	IsOn        bool
@@ -97,11 +95,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 			MemoryPolicy: &serverconfigs.HTTPCachePolicy{
 				Capacity: memoryCapacity,
 			},
-			OpenFileCache:                  openFileCacheConfig,
-			EnableSendfile:                 params.FileEnableSendfile,
-			MinFreeSize:                    minFreeSize,
-			EnableMMAP:                     params.EnableMMAP,
-			EnableIncompletePartialContent: params.EnableIncompletePartialContent,
+			OpenFileCache:  openFileCacheConfig,
+			EnableSendfile: params.FileEnableSendfile,
+			MinFreeSize:    minFreeSize,
+			EnableMMAP:     params.EnableMMAP,
 		}
 	case serverconfigs.CachePolicyStorageMemory:
 		options = &serverconfigs.HTTPMemoryCacheStorage{}

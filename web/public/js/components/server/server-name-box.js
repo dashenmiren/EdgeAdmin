@@ -19,7 +19,6 @@ Vue.component("server-name-box", {
 				callback: function (resp) {
 					var serverName = resp.data.serverName
 					that.serverNames.push(serverName)
-					setTimeout(that.submitForm, 100)
 				}
 			});
 		},
@@ -35,7 +34,6 @@ Vue.component("server-name-box", {
 				callback: function (resp) {
 					var serverName = resp.data.serverName
 					Vue.set(that.serverNames, index, serverName)
-					setTimeout(that.submitForm, 100)
 				}
 			});
 		},
@@ -71,9 +69,6 @@ Vue.component("server-name-box", {
 				}
 			})
 			return result
-		},
-		submitForm: function () {
-			//Tea.runActionOn(this.$refs.serverNamesRef.form)
 		}
 	},
 	watch: {
@@ -100,7 +95,7 @@ Vue.component("server-name-box", {
 		}
 	},
 	template: `<div>
-	<input type="hidden" name="serverNames" :value="JSON.stringify(serverNames)" ref="serverNamesRef"/>
+	<input type="hidden" name="serverNames" :value="JSON.stringify(serverNames)"/>
 	<div v-if="serverNames.length > 0">
 		<div v-for="(serverName, index) in serverNames" class="ui label small basic" :class="{hidden: serverName.isShowing === false}">
 			<em v-if="serverName.type != 'full'">{{serverName.type}}</em>  

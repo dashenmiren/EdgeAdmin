@@ -2,9 +2,8 @@ package providers
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
 )
@@ -60,7 +59,6 @@ func (this *ProviderAction) RunGet(params struct {
 		"name":         provider.Name,
 		"type":         provider.Type,
 		"typeName":     provider.TypeName,
-		"minTTL":       provider.MinTTL,
 		"apiParams":    apiParams,
 		"localEdgeDNS": localEdgeDNSMap,
 	}

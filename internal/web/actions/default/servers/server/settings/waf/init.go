@@ -1,10 +1,10 @@
 package waf
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/servers/server/settings/waf/ipadmin"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/servers/serverutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/waf/ipadmin"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/serverutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 
@@ -17,13 +17,10 @@ func init() {
 			GetPost("", new(IndexAction)).
 			Get("/ipadmin/allowList", new(ipadmin.AllowListAction)).
 			Get("/ipadmin/denyList", new(ipadmin.DenyListAction)).
-			Get("/ipadmin/greyList", new(ipadmin.GreyListAction)).
 			GetPost("/ipadmin/countries", new(ipadmin.CountriesAction)).
 			Get("/ipadmin/selectCountriesPopup", new(ipadmin.SelectCountriesPopupAction)).
 			Get("/ipadmin/selectProvincesPopup", new(ipadmin.SelectProvincesPopupAction)).
-			Get("/ipadmin/selectProvidersPopup", new(ipadmin.SelectProvidersPopupAction)).
 			GetPost("/ipadmin/provinces", new(ipadmin.ProvincesAction)).
-			GetPost("/ipadmin/providers", new(ipadmin.ProvidersAction)).
 			GetPost("/ipadmin/updateIPPopup", new(ipadmin.UpdateIPPopupAction)).
 			Post("/ipadmin/deleteIP", new(ipadmin.DeleteIPAction)).
 			GetPost("/ipadmin/test", new(ipadmin.TestAction)).

@@ -1,9 +1,8 @@
 package clusterutils
 
 import (
-	"net/http"
-
 	"github.com/iwind/TeaGo/actions"
+	"net/http"
 )
 
 type ClustersHelper struct {

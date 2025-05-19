@@ -2,7 +2,6 @@ Tea.context(function () {
 	this.isStarted = false
 	this.isChecking = false
 	this.result = {isOk: false, message: "", hasNew: false, dlURL: ""}
-	this.isUpgraded = false
 
 	this.$delay(function () {
 		if (this.doCheck) {
@@ -65,15 +64,9 @@ Tea.context(function () {
 			})
 			.timeout(3600)
 			.success(function () {
-				this.$delay(function () {
-					let msg = "下载覆盖成功"
-					if (this.isUpgraded) {
-						msg = "升级成功"
-					}
-					teaweb.success(msg + "，当前管理系统将会尝试自动重启，请刷新页面查看重启状态。如果长时间没能重启成功，请使用命令手动重启。", function () {
-						teaweb.reload()
-					})
-				}, 3000)
+				teaweb.success("下载覆盖成功，系统将会尝试自动重启，请刷新页面查看重启状态。如果没能重启成功，请手动使用命令重启。", function () {
+					teaweb.reload()
+				})
 			})
 
 		this.isUpgrading = true
@@ -94,15 +87,11 @@ Tea.context(function () {
 			.success(function (resp) {
 				this.upgradeProgress = resp.data.upgradeProgress
 				this.isUpgrading = resp.data.isUpgrading
-				this.isUpgradingDB = resp.data.isUpgradingDB
-				if (resp.data.isUpgradingDB) {
-					this.isUpgraded = true
-				}
 			})
 			.done(function () {
 				this.$delay(function () {
 					this.updateUpgradeProgress()
-				}, 2000)
+				}, 3000)
 			})
 	}
 })

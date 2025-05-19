@@ -1,15 +1,14 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package ddosProtection
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/messageconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ddosconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/ddosconfigs"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -35,7 +34,7 @@ func (this *StatusAction) RunPost(params struct {
 }) {
 	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeCheckLocalFirewall, &messageconfigs.CheckLocalFirewallMessage{
 		Name: "nftables",
-	}, 10, false)
+	}, 10)
 	if err != nil {
 		this.ErrorPage(err)
 		return

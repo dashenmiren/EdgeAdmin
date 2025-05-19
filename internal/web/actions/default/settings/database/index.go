@@ -1,17 +1,14 @@
 package database
 
 import (
-	"net"
-	"os"
-	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/configs"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/go-sql-driver/mysql"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/dbs"
 	"github.com/iwind/TeaGo/maps"
 	"gopkg.in/yaml.v3"
+	"os"
+	"strings"
 )
 
 type IndexAction struct {
@@ -25,7 +22,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct{}) {
 	this.Data["error"] = ""
 
-	var configFile = Tea.ConfigFile("api_db.yaml")
+	configFile := Tea.ConfigFile("api_db.yaml")
 	data, err := os.ReadFile(configFile)
 	if err != nil {
 		this.Data["error"] = "read config file failed: api_db.yaml: " + err.Error()
@@ -33,33 +30,8 @@ func (this *IndexAction) RunGet(params struct{}) {
 		return
 	}
 
-	// new config
-	var config = &configs.SimpleDBConfig{}
+	config := &dbs.Config{}
 	err = yaml.Unmarshal(data, config)
-	if err == nil && len(config.Host) > 0 {
-		host, port, splitErr := net.SplitHostPort(config.Host)
-		if splitErr != nil {
-			port = "3306"
-		}
-
-		this.Data["dbConfig"] = maps.Map{
-			"host":     host,
-			"port":     port,
-			"username": config.User,
-			"password": config.Password,
-			"database": config.Database,
-		}
-
-		this.Show()
-		return
-	}
-
-	this.parseOldConfig(data)
-}
-
-func (this *IndexAction) parseOldConfig(data []byte) {
-	var config = &dbs.Config{}
-	err := yaml.Unmarshal(data, config)
 	if err != nil {
 		this.Data["error"] = "parse config file failed: api_db.yaml: " + err.Error()
 		this.Show()
@@ -77,12 +49,7 @@ func (this *IndexAction) parseOldConfig(data []byte) {
 		dbConfig = db
 		break
 	}
-	if dbConfig == nil {
-		this.Data["error"] = "no database configured in config file: api_db.yaml"
-		this.Show()
-		return
-	}
-	var dsn = dbConfig.Dsn
+	dsn := dbConfig.Dsn
 	cfg, err := mysql.ParseDSN(dsn)
 	if err != nil {
 		this.Data["error"] = "parse dsn error: " + err.Error()
@@ -90,19 +57,18 @@ func (this *IndexAction) parseOldConfig(data []byte) {
 		return
 	}
 
-	var host = cfg.Addr
-	var port = "3306"
-	var index = strings.LastIndex(host, ":")
+	host := cfg.Addr
+	port := "3306"
+	index := strings.LastIndex(host, ":")
 	if index > 0 {
 		port = host[index+1:]
 		host = host[:index]
 	}
 
-	var password = cfg.Passwd
+	password := cfg.Passwd
 	if len(password) > 0 {
 		password = strings.Repeat("*", len(password))
 	}
-
 	this.Data["dbConfig"] = maps.Map{
 		"host":     host,
 		"port":     port,

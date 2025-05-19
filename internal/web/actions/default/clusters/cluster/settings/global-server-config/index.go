@@ -1,18 +1,17 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package globalServerConfig
 
 import (
 	"encoding/json"
-	"regexp"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 type IndexAction struct {
@@ -111,7 +110,6 @@ func (this *IndexAction) RunPost(params struct {
 	HttpAllNodeIPShowPage                  bool
 	HttpAllEnableServerAddrVariable        bool
 	HttpAllRequestOriginsWithEncodings     bool
-	HttpAllXFFMaxAddresses                 int
 
 	HttpAllDomainAuditingIsOn   bool
 	HttpAllDomainAuditingPrompt string
@@ -221,7 +219,6 @@ func (this *IndexAction) RunPost(params struct {
 	config.HTTPAll.LnRequestSchedulingMethod = params.HttpAllLnRequestSchedulingMethod
 	config.HTTPAll.EnableServerAddrVariable = params.HttpAllEnableServerAddrVariable
 	config.HTTPAll.RequestOriginsWithEncodings = params.HttpAllRequestOriginsWithEncodings
-	config.HTTPAll.XFFMaxAddresses = params.HttpAllXFFMaxAddresses
 
 	// 访问日志
 	config.HTTPAccessLog.IsOn = params.HttpAccessLogIsOn

@@ -1,13 +1,13 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package iplists
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ipconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/ipconfigs"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -34,11 +34,9 @@ func (this *HttpFirewallAction) RunPost(params struct {
 		refs = inboundConfig.PublicDenyListRefs
 	case ipconfigs.IPListTypeWhite:
 		refs = inboundConfig.PublicAllowListRefs
-	case ipconfigs.IPListTypeGrey:
-		refs = inboundConfig.PublicGreyListRefs
 	}
 
-	var listMaps = []maps.Map{}
+	listMaps := []maps.Map{}
 	for _, ref := range refs {
 		listResp, err := this.RPC().IPListRPC().FindEnabledIPList(this.AdminContext(), &pb.FindEnabledIPListRequest{IpListId: ref.ListId})
 		if err != nil {

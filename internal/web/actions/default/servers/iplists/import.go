@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package iplists
 
@@ -6,18 +6,17 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/json"
-	"io"
-	"regexp"
-	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/types"
 	"github.com/tealeg/xlsx/v3"
+	"io"
+	"regexp"
+	"strings"
 )
 
 type ImportAction struct {

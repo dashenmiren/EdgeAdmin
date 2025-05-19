@@ -1,11 +1,11 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package iplists
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ipconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/ipconfigs"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -36,8 +36,8 @@ func (this *ListsAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var count = countResp.Count
-	var page = this.NewPage(count)
+	count := countResp.Count
+	page := this.NewPage(count)
 	this.Data["page"] = page.AsHTML()
 
 	listsResp, err := this.RPC().IPListRPC().ListEnabledIPLists(this.AdminContext(), &pb.ListEnabledIPListsRequest{
@@ -65,7 +65,6 @@ func (this *ListsAction) RunGet(params struct {
 			"id":          list.Id,
 			"isOn":        list.IsOn,
 			"name":        list.Name,
-			"code":        list.Code,
 			"description": list.Description,
 			"countItems":  countItems,
 			"type":        list.Type,

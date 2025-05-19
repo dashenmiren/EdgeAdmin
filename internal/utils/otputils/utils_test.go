@@ -1,11 +1,10 @@
-// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2024 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package otputils_test
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils/otputils"
 	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils/otputils"
 )
 
 func TestFixIssuer(t *testing.T) {

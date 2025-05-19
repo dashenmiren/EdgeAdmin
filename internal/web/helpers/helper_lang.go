@@ -1,11 +1,11 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package helpers
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs"
 	"github.com/iwind/TeaGo/actions"
 )
 

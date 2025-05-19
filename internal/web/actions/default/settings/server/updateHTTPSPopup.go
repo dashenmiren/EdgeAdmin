@@ -3,17 +3,16 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"net"
-	"os"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	adminserverutils "github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/sslconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	adminserverutils "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/actions"
+	"net"
+	"os"
 )
 
 type UpdateHTTPSPopupAction struct {

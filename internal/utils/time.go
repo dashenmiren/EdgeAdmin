@@ -1,13 +1,12 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package utils
 
 import (
 	"errors"
 	"fmt"
-	"regexp"
-
 	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 // RangeTimes 计算时间点

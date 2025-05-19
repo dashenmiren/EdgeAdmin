@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 //go:build gcc
 
 package injectionutils
@@ -11,12 +11,11 @@ package injectionutils
 */
 import "C"
 import (
+	"github.com/cespare/xxhash/v2"
 	"net/url"
 	"strconv"
 	"strings"
 	"unsafe"
-
-	"github.com/cespare/xxhash/v2"
 )
 
 const MaxCacheDataSize = 1 << 20

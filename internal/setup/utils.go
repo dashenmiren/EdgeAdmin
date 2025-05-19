@@ -1,7 +1,7 @@
 package setup
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/configs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 )
 
 var isConfigured bool

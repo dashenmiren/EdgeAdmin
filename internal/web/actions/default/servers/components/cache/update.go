@@ -2,13 +2,12 @@ package cache
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -57,15 +56,7 @@ func (this *UpdateAction) RunGet(params struct {
 		{
 			_, ok := cachePolicy.Options["enableMMAP"]
 			if !ok {
-				cachePolicy.Options["enableMMAP"] = false
-			}
-		}
-
-		// fix enableIncompletePartialContent
-		{
-			_, ok := cachePolicy.Options["enableIncompletePartialContent"]
-			if !ok {
-				cachePolicy.Options["enableIncompletePartialContent"] = true
+				cachePolicy.Options["enableMMAP"] = true
 			}
 		}
 	}
@@ -96,8 +87,7 @@ func (this *UpdateAction) RunPost(params struct {
 	SyncCompressionCache bool
 	FetchTimeoutJSON     []byte
 
-	EnableMMAP                     bool
-	EnableIncompletePartialContent bool
+	EnableMMAP bool
 
 	Description string
 	IsOn        bool
@@ -156,11 +146,10 @@ func (this *UpdateAction) RunPost(params struct {
 			MemoryPolicy: &serverconfigs.HTTPCachePolicy{
 				Capacity: memoryCapacity,
 			},
-			OpenFileCache:                  openFileCacheConfig,
-			EnableSendfile:                 params.FileEnableSendfile,
-			MinFreeSize:                    minFreeSize,
-			EnableMMAP:                     params.EnableMMAP,
-			EnableIncompletePartialContent: params.EnableIncompletePartialContent,
+			OpenFileCache:  openFileCacheConfig,
+			EnableSendfile: params.FileEnableSendfile,
+			MinFreeSize:    minFreeSize,
+			EnableMMAP:     params.EnableMMAP,
 		}
 	case serverconfigs.CachePolicyStorageMemory:
 		options = &serverconfigs.HTTPMemoryCacheStorage{}

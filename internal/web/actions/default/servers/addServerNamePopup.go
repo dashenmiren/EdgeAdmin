@@ -1,14 +1,13 @@
 package servers
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 	"net"
 	"net/url"
 	"regexp"
 	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/iwind/TeaGo/actions"
-	"github.com/iwind/TeaGo/maps"
 )
 
 type AddServerNamePopupAction struct {

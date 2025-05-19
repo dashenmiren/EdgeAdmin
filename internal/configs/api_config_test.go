@@ -1,10 +1,9 @@
 package configs
 
 import (
-	"testing"
-
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"gopkg.in/yaml.v3"
+	"testing"
 )
 
 func TestLoadAPIConfig(t *testing.T) {

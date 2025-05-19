@@ -1,13 +1,12 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package apinodeutils_test
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils/apinodeutils"
+	_ "github.com/iwind/TeaGo/bootstrap"
 	"runtime"
 	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils/apinodeutils"
-	_ "github.com/iwind/TeaGo/bootstrap"
 )
 
 func TestUpgrader_CanUpgrade(t *testing.T) {

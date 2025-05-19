@@ -2,32 +2,33 @@ package index
 
 import (
 	"fmt"
-	"net"
-	"time"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/dashenmiren/EdgeAdmin/internal/oplogs"
-	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
-	"github.com/dashenmiren/EdgeAdmin/internal/setup"
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/index/loginutils"
-	adminserverutils "github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
-	"github.com/dashenmiren/EdgeCommon/pkg/configutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/iplibrary"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/systemconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/index/loginutils"
+	adminserverutils "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server/admin-server-utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/iplibrary"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/rands"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
+	"net"
+	"time"
 )
+
+const regionDenyMessage = "当前软件系统暂时不为你所在的区域提供服务。"
 
 type IndexAction struct {
 	actionutils.ParentAction
@@ -43,7 +44,10 @@ func (this *IndexAction) RunGet(params struct {
 
 	Auth *helpers.UserShouldAuth
 }) {
-
+	if !this.checkRegion() {
+		this.WriteString(regionDenyMessage)
+		return
+	}
 
 	// 是否自动从HTTP跳转到HTTPS
 	if this.Request.TLS == nil {
@@ -147,6 +151,10 @@ func (this *IndexAction) RunPost(params struct {
 	Auth *helpers.UserShouldAuth
 	CSRF *actionutils.CSRF
 }) {
+	if !this.checkRegion() {
+		this.Fail(regionDenyMessage)
+		return
+	}
 
 	params.Must.
 		Field("username", params.Username).
@@ -229,27 +237,15 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 写入SESSION
-	var currentIP = loginutils.RemoteIP(&this.ActionObject)
 	var localSid = rands.HexString(32)
 	this.Data["localSid"] = localSid
-	this.Data["ip"] = currentIP
+	this.Data["ip"] = loginutils.RemoteIP(&this.ActionObject)
 	params.Auth.StoreAdmin(adminId, params.Remember, localSid)
-
-	// 清理老的SESSION
-	_, err = this.RPC().LoginSessionRPC().ClearOldLoginSessions(this.AdminContext(), &pb.ClearOldLoginSessionsRequest{
-		Sid: this.Session().Sid,
-		Ip:  currentIP,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
 
 	// 记录日志
 	err = dao.SharedLogDAO.CreateAdminLog(rpcClient.Context(adminId), oplogs.LevelInfo, this.Request.URL.Path, langs.DefaultMessage(codes.AdminLogin_LogSuccess, params.Username), loginutils.RemoteIP(&this.ActionObject), codes.AdminLogin_LogSuccess, []any{params.Username})
 	if err != nil {
-		this.ErrorPage(err)
-		return
+		utils.PrintError(err)
 	}
 
 	this.Success()
@@ -257,7 +253,6 @@ func (this *IndexAction) RunPost(params struct {
 
 // 检查登录区域
 func (this *IndexAction) checkRegion() bool {
-	return true // 暂时不限制
 	var ip = loginutils.RemoteIP(&this.ActionObject)
 	var result = iplibrary.LookupIP(ip)
 	if result != nil && result.IsOk() && result.CountryId() > 0 && lists.ContainsInt64([]int64{9, 10}, result.CountryId()) {

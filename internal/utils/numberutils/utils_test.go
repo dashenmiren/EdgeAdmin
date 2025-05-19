@@ -1,12 +1,11 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package numberutils_test
 
 import (
-	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils/numberutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/iwind/TeaGo/assert"
+	"testing"
 )
 
 func TestFormatBytes(t *testing.T) {

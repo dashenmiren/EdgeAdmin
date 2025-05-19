@@ -242,7 +242,7 @@ Vue.component("traffic-map-box-table", {
 	   <table class="ui table selectable">
 		  <thead>
 			<tr>
-				<th colspan="2">国家/地区排行&nbsp; <tip-icon content="只有开启了统计的网站才会有记录。"></tip-icon></th>
+				<th colspan="2">国家/地区排行&nbsp; <tip-icon content="只有开启了统计的服务才会有记录。"></tip-icon></th>
 			</tr>
 		  </thead>
 		   <tbody v-if="stats.length == 0">
@@ -4122,7 +4122,7 @@ Vue.component("ssl-config-box", {
 		// 删除证书
 		removeCert: function (index) {
 			let that = this
-			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前网站不再使用此证书。", function () {
+			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前服务不再使用此证书。", function () {
 				that.policy.certRefs.$remove(index)
 				that.policy.certs.$remove(index)
 			})
@@ -4409,7 +4409,7 @@ Vue.component("ssl-config-box", {
 		// 删除客户端CA证书
 		removeClientCACert: function (index) {
 			let that = this
-			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前网站不再使用此证书。", function () {
+			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前服务不再使用此证书。", function () {
 				that.policy.clientCARefs.$remove(index)
 				that.policy.clientCACerts.$remove(index)
 			})
@@ -4439,7 +4439,7 @@ Vue.component("ssl-config-box", {
 				</td>
 			</tr>
 			<tr>
-				<td class="title">设置证书</td>
+				<td class="title">选择证书</td>
 				<td>
 					<div v-if="policy.certs != null && policy.certs.length > 0">
 						<div class="ui label small basic" v-for="(cert, index) in policy.certs" style="margin-top: 0.2em">
@@ -4639,11 +4639,6 @@ Vue.component("http-firewall-actions-view", {
 			  			<span v-if="action.options.scope == 'group'">[分组]</span>
 						<span v-if="action.options.scope == 'server'">[网站]</span>
 						<span v-if="action.options.scope == 'global'">[网站和策略]</span>	
-					</span>
-					<span class="grey small" v-if="action.code.toLowerCase() == 'record_ip'">
-						<span v-if="action.options.type == 'black'" class="red">黑名单</span>
-						<span v-if="action.options.type == 'white'" class="green">白名单</span>
-						<span v-if="action.options.type == 'grey'" class="grey">灰名单</span>
 					</span>
 				</div>	
 			</span>
@@ -4873,7 +4868,7 @@ Vue.component("ssl-certs-box", {
 		// 删除证书
 		removeCert: function (index) {
 			let that = this
-			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前网站不再使用此证书。", function () {
+			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前服务不再使用此证书。", function () {
 				that.certs.$remove(index)
 			})
 		},
@@ -5618,14 +5613,14 @@ Vue.component("http-request-limit-config-box", {
 				<td>最大并发连接数</td>
 				<td>
 					<input type="text" maxlength="6" v-model="maxConns"/>
-					<p class="comment">当前网站最大并发连接数，超出此限制则响应用户<code-label>429</code-label>代码。为0表示不限制。</p>
+					<p class="comment">当前服务最大并发连接数，超出此限制则响应用户<code-label>429</code-label>代码。为0表示不限制。</p>
 				</td>
 			</tr>
 			<tr>
 				<td>单IP最大并发连接数</td>
 				<td>
 					<input type="text" maxlength="6" v-model="maxConnsPerIP"/>
-					<p class="comment">单IP最大连接数，统计单个IP总连接数时不区分网站，超出此限制则响应用户<code-label>429</code-label>代码。为0表示不限制。<span v-if="maxConnsPerIP > 0 && maxConnsPerIP <= 3" class="red">当前设置的并发连接数过低，可能会影响正常用户访问，建议不小于3。</span></p>
+					<p class="comment">单IP最大连接数，统计单个IP总连接数时不区分服务，超出此限制则响应用户<code-label>429</code-label>代码。为0表示不限制。<span v-if="maxConnsPerIP > 0 && maxConnsPerIP <= 3" class="red">当前设置的并发连接数过低，可能会影响正常用户访问，建议不小于3。</span></p>
 				</td>
 			</tr>
 			<tr>
@@ -5891,8 +5886,8 @@ Vue.component("http-firewall-config-box", {
 						<option value="none">默认</option>
 						<option v-for="captchaType in captchaTypes" v-if="captchaType.code != 'geetest' || geeTestIsOn" :value="captchaType.code">{{captchaType.name}}</option>
 					</select>
-					<p class="comment" v-if="firewall.defaultCaptchaType == 'none'">使用系统默认的设置。你需要在入站规则中添加规则集来决定哪些请求需要人机识别验证。</p>
-					<p class="comment" v-for="captchaType in captchaTypes" v-if="captchaType.code == firewall.defaultCaptchaType">{{captchaType.description}}你需要在入站规则中添加规则集来决定哪些请求需要人机识别验证。</p>
+					<p class="comment" v-if="firewall.defaultCaptchaType == 'none'">使用系统默认的设置。</p>
+					<p class="comment" v-for="captchaType in captchaTypes" v-if="captchaType.code == firewall.defaultCaptchaType">{{captchaType.description}}</p>
 				</td>
 			</tr>
 			<tr>
@@ -6512,7 +6507,7 @@ Vue.component("http-cache-config-box", {
 				<td>添加X-Cache报头</td>
 				<td>
 					<checkbox v-model="cacheConfig.addStatusHeader"></checkbox>
-					<p class="comment">选中后自动在响应报头中增加<code-label>X-Cache: BYPASS|MISS|HIT|PURGE</code-label>；在浏览器端查看X-Cache值时请先禁用浏览器缓存，避免影响观察。</p>
+					<p class="comment">选中后自动在响应Header中增加<code-label>X-Cache: BYPASS|MISS|HIT|PURGE</code-label>；在浏览器端查看X-Cache值时请先禁用浏览器缓存，避免影响观察。</p>
 				</td>
 			</tr>
 			<tr>
@@ -7416,11 +7411,11 @@ Vue.component("origin-list-box", {
 	template: `<div>
 	<h3>主要源站 <a href="" @click.prevent="createPrimaryOrigin()">[添加主要源站]</a> </h3>
 	<p class="comment" v-if="primaryOrigins.length == 0">暂时还没有主要源站。</p>
-	<origin-list-table v-if="primaryOrigins.length > 0" :v-origins="vPrimaryOrigins" :v-origin-type="'primary'" @delete-origin="deleteOrigin" @update-origin="updateOrigin" @update-origin-is-on="updateOriginIsOn"></origin-list-table>
+	<origin-list-table v-if="primaryOrigins.length > 0" :v-origins="vPrimaryOrigins" :v-origin-type="'primary'" @deleteOrigin="deleteOrigin" @updateOrigin="updateOrigin" @updateOriginIsOn="updateOriginIsOn"></origin-list-table>
 
 	<h3>备用源站 <a href="" @click.prevent="createBackupOrigin()">[添加备用源站]</a></h3>
 	<p class="comment" v-if="backupOrigins.length == 0">暂时还没有备用源站。</p>
-	<origin-list-table v-if="backupOrigins.length > 0" :v-origins="backupOrigins" :v-origin-type="'backup'" @delete-origin="deleteOrigin" @update-origin="updateOrigin" @update-origin-is-on="updateOriginIsOn"></origin-list-table>
+	<origin-list-table v-if="backupOrigins.length > 0" :v-origins="backupOrigins" :v-origin-type="'backup'" @deleteOrigin="deleteOrigin" @updateOrigin="updateOrigin" @updateOriginIsOn="updateOriginIsOn"></origin-list-table>
 </div>`
 })
 
@@ -7443,13 +7438,13 @@ Vue.component("origin-list-table", {
 	},
 	methods: {
 		deleteOrigin: function (originId, originAddr) {
-			this.$emit("delete-origin", originId, originAddr, this.vOriginType)
+			this.$emit("deleteOrigin", originId, originAddr, this.vOriginType)
 		},
 		updateOrigin: function (originId) {
-			this.$emit("update-origin", originId, this.vOriginType)
+			this.$emit("updateOrigin", originId, this.vOriginType)
 		},
 		updateOriginIsOn: function (originId, originAddr, isOn) {
-			this.$emit("update-origin-is-on", originId, originAddr, isOn)
+			this.$emit("updateOriginIsOn", originId, originAddr, isOn)
 		}
 	},
 	template: `
@@ -8083,7 +8078,6 @@ Vue.component("server-name-box", {
 				callback: function (resp) {
 					var serverName = resp.data.serverName
 					that.serverNames.push(serverName)
-					setTimeout(that.submitForm, 100)
 				}
 			});
 		},
@@ -8099,7 +8093,6 @@ Vue.component("server-name-box", {
 				callback: function (resp) {
 					var serverName = resp.data.serverName
 					Vue.set(that.serverNames, index, serverName)
-					setTimeout(that.submitForm, 100)
 				}
 			});
 		},
@@ -8135,9 +8128,6 @@ Vue.component("server-name-box", {
 				}
 			})
 			return result
-		},
-		submitForm: function () {
-			//Tea.runActionOn(this.$refs.serverNamesRef.form)
 		}
 	},
 	watch: {
@@ -8164,7 +8154,7 @@ Vue.component("server-name-box", {
 		}
 	},
 	template: `<div>
-	<input type="hidden" name="serverNames" :value="JSON.stringify(serverNames)" ref="serverNamesRef"/>
+	<input type="hidden" name="serverNames" :value="JSON.stringify(serverNames)"/>
 	<div v-if="serverNames.length > 0">
 		<div v-for="(serverName, index) in serverNames" class="ui label small basic" :class="{hidden: serverName.isShowing === false}">
 			<em v-if="serverName.type != 'full'">{{serverName.type}}</em>  
@@ -8200,8 +8190,7 @@ Vue.component("uam-config-box", {
 				addToWhiteList: true,
 				onlyURLPatterns: [],
 				exceptURLPatterns: [],
-				minQPSPerIP: 0,
-				keyLife: 0
+				minQPSPerIP: 0
 			}
 		}
 		if (config.onlyURLPatterns == null) {
@@ -8213,8 +8202,7 @@ Vue.component("uam-config-box", {
 		return {
 			config: config,
 			moreOptionsVisible: false,
-			minQPSPerIP: config.minQPSPerIP,
-			keyLife: config.keyLife
+			minQPSPerIP: config.minQPSPerIP
 		}
 	},
 	watch: {
@@ -8224,13 +8212,6 @@ Vue.component("uam-config-box", {
 				qps = 0
 			}
 			this.config.minQPSPerIP = qps
-		},
-		keyLife: function (v) {
-			let keyLife = parseInt(v)
-			if (isNaN(keyLife) || keyLife <= 0) {
-				keyLife = 0
-			}
-			this.config.keyLife = keyLife
 		}
 	},
 	methods: {
@@ -8260,16 +8241,6 @@ Vue.component("uam-config-box", {
 		</tr>
 	</tbody>
 	<tbody v-show="moreOptionsVisible && config.isOn">
-		<tr>
-			<td>验证有效期</td>
-			<td>
-				<div class="ui input right labeled">
-                     <input type="text" name="keyLife" v-model="keyLife" maxlength="6" size="6" style="width: 6em"/>
-                     <span class="ui label">秒</span>
-                </div>
-                <p class="comment">单个客户端验证通过后，在这个有效期内不再重复验证；如果为0则表示系统默认。</p>
-			</td>
-		</tr>
 		<tr>
 			<td>单IP最低QPS</td>
 			<td>
@@ -9800,7 +9771,7 @@ Vue.component("http-firewall-actions-box", {
 						<option value="service">当前网站</option>
 						<option value="global">所有网站</option>
 					</select>
-					<p class="comment" v-if="blockScope == 'service'">只封禁用户对当前网站的访问，其他网站不受影响。</p>
+					<p class="comment" v-if="blockScope == 'service'">只封禁用户对当前网站的访问，其他服务不受影响。</p>
 					<p class="comment" v-if="blockScope =='global'">封禁用户对所有网站的访问。</p>
 				</td>
 			</tr>
@@ -9919,7 +9890,6 @@ Vue.component("http-firewall-actions-box", {
 					<select class="ui dropdown auto-width" v-model="recordIPType">
 					<option value="black">黑名单</option>
 					<option value="white">白名单</option>
-					<option value="grey">灰名单</option>
 					</select>
 				</td>
 			</tr>
@@ -10633,7 +10603,7 @@ Vue.component("http-cache-policy-selector", {
 })
 
 Vue.component("http-pages-and-shutdown-box", {
-	props: ["v-enable-global-pages", "v-pages", "v-shutdown-config", "v-is-location"],
+	props: ["v-pages", "v-shutdown-config", "v-is-location"],
 	data: function () {
 		let pages = []
 		if (this.vPages != null) {
@@ -10665,8 +10635,7 @@ Vue.component("http-pages-and-shutdown-box", {
 		return {
 			pages: pages,
 			shutdownConfig: shutdownConfig,
-			shutdownStatus: shutdownStatus,
-			enableGlobalPages: this.vEnableGlobalPages
+			shutdownStatus: shutdownStatus
 		}
 	},
 	watch: {
@@ -10749,7 +10718,6 @@ Vue.component("http-pages-and-shutdown-box", {
 	template: `<div>
 <input type="hidden" name="pagesJSON" :value="JSON.stringify(pages)"/>
 <input type="hidden" name="shutdownJSON" :value="JSON.stringify(shutdownConfig)"/>
-
 <h4 style="margin-bottom: 0.5em">自定义页面</h4>
 
 <p class="comment" style="padding-top: 0; margin-top: 0">根据响应状态码返回一些自定义页面，比如404，500等错误页面。</p>
@@ -10879,19 +10847,7 @@ Vue.component("http-pages-and-shutdown-box", {
 		</tbody>
 	</table>
 </div>
-
-<h4 style="margin-top: 2em;">其他设置</h4>
-<table class="ui table definition selectable">
-	<tr>
-		<td class="title">启用系统自定义页面</td>
-		<td>
-			<checkbox name="enableGlobalPages" v-model="enableGlobalPages"></checkbox>
-			<p class="comment">选中后，表示如果当前网站没有自定义页面，则尝试使用系统对应的自定义页面。</p>
-		</td>
-	</tr>
-</table>
 <div class="ui margin"></div>
-
 </div>`
 })
 
@@ -11871,7 +11827,7 @@ Vue.component("http-access-log-box", {
 	<div>
 		<a v-if="accessLog.node != null && accessLog.node.nodeCluster != null" :href="'/clusters/cluster/node?nodeId=' + accessLog.node.id + '&clusterId=' + accessLog.node.nodeCluster.id" title="点击查看节点详情" target="_top"><span class="grey">[{{accessLog.node.name}}<span v-if="!accessLog.node.name.endsWith('节点')">节点</span>]</span></a>
 		
-		<!-- 网站 -->
+		<!-- 服务 -->
 		<a :href="'/servers/server/log?serverId=' + accessLog.serverId" title="点击到网站" v-if="vShowServerLink && accessLog.serverId > 0"><span class="grey">[网站]</span></a>
 		<span v-if="vShowServerLink && (accessLog.serverId == null || accessLog.serverId == 0)" @click.prevent="mismatch()"><span class="disabled">[网站]</span></span>
 		
@@ -13600,7 +13556,7 @@ Vue.component("http-access-log-search-box", {
 				<a class="ui label basic" :class="{disabled: keyword.length == 0}" @click.prevent="cleanKeyword"><i class="icon remove small"></i></a>
 			</div>
 		</div>
-		<div class="ui field"><tip-icon content="一些特殊的关键词：<br/>单个状态码：status:200<br/>状态码范围：status:500-504<br/>查询IP：ip:192.168.1.100<br/>查询URL：https://cdn.foyeseo.com/docs<br/>查询路径部分：requestPath:/hello/world<br/>查询协议版本：proto:HTTP/1.1<br/>协议：scheme:http<br/>请求方法：method:POST<br/>请求来源：referer:example.com"></tip-icon></div>
+		<div class="ui field"><tip-icon content="一些特殊的关键词：<br/>单个状态码：status:200<br/>状态码范围：status:500-504<br/>查询IP：ip:192.168.1.100<br/>查询URL：https://goedge.cn/docs<br/>查询路径部分：requestPath:/hello/world<br/>查询协议版本：proto:HTTP/1.1<br/>协议：scheme:http<br/>请求方法：method:POST<br/>请求来源：referer:example.com"></tip-icon></div>
 	</div>
 	<div class="ui fields inline" style="margin-top: 0.5em">
 		<div class="ui field">
@@ -17052,7 +17008,7 @@ Vue.component("ip-list-table", {
 					</div>
 				</td>
 				<td>
-					<span v-if="item.type != 'all'" :class="{green: item.list != null && item.list.type == 'white', grey: item.list != null && item.list.type == 'grey'}">
+					<span v-if="item.type != 'all'" :class="{green: item.list != null && item.list.type == 'white'}">
 						<span v-if="item.value != null && item.value.length > 0"><keyword :v-word="keyword">{{item.value}}</keyword></span>
 						<span v-else>
 							<keyword :v-word="keyword">{{item.ipFrom}}</keyword> <span> <span class="small red" v-if="item.isRead != null && !item.isRead">&nbsp;New&nbsp;</span>&nbsp;<a :href="'/servers/iplists?ip=' + item.ipFrom" v-if="vShowSearchButton" title="搜索此IP"><span><i class="icon search small" style="color: #ccc"></i></span></a></span>
@@ -17072,14 +17028,13 @@ Vue.component("ip-list-table", {
 							<span v-if="item.list != null && item.list.id > 0">
 								@ 
 								
-								<a :href="'/servers/iplists/list?listId=' + item.list.id" v-if="item.policy.id == 0"><span>[<span v-if="item.list.type == 'black'">黑</span><span v-if="item.list.type == 'white'">白</span><span v-if="item.list.type == 'grey'">灰</span>名单：{{item.list.name}}]</span></a>
-								<span v-else>[<span v-if="item.list.type == 'black'">黑</span><span v-if="item.list.type == 'white'">白</span><span v-if="item.list.type == 'grey'">灰</span>名单：{{item.list.name}}</span>
+								<a :href="'/servers/iplists/list?listId=' + item.list.id" v-if="item.policy.id == 0"><span>[<span v-if="item.list.type == 'black'">黑</span><span v-if="item.list.type == 'white'">白</span>名单：{{item.list.name}}]</span></a>
+								<span v-else>[<span v-if="item.list.type == 'black'">黑</span><span v-if="item.list.type == 'white'">白</span>名单：{{item.list.name}}</span>
 								
 								<span v-if="item.policy.id > 0">
 									<span v-if="item.policy.server != null">
 										<a :href="'/servers/server/settings/waf/ipadmin/allowList?serverId=' + item.policy.server.id + '&firewallPolicyId=' + item.policy.id" v-if="item.list.type == 'white'">[网站：{{item.policy.server.name}}]</a>
 										<a :href="'/servers/server/settings/waf/ipadmin/denyList?serverId=' + item.policy.server.id + '&firewallPolicyId=' + item.policy.id" v-if="item.list.type == 'black'">[网站：{{item.policy.server.name}}]</a>
-										<a :href="'/servers/server/settings/waf/ipadmin/greyList?serverId=' + item.policy.server.id + '&firewallPolicyId=' + item.policy.id" v-if="item.list.type == 'grey'">[网站：{{item.policy.server.name}}]</a>
 									</span>
 									<span v-else>
 										<a :href="'/servers/components/waf/ipadmin/lists?firewallPolicyId=' + item.policy.id +  '&type=' + item.list.type">[策略：{{item.policy.name}}]</a>
@@ -17181,53 +17136,20 @@ Vue.component("sms-sender", {
 		this.initType(this.config.type)
 	},
 	data: function () {
-		let config = this.value
-		if (config == null) {
-			config = {
+		let value = this.value
+		if (value == null) {
+			value = {
 				isOn: false,
 				type: "webHook",
 				webHookParams: {
 					url: "",
 					method: "POST"
-				},
-				aliyunSMSParams: {
-					sign: "",
-					templateCode: "",
-					codeVarName: "code",
-					accessKeyId: "",
-					accessKeySecret: ""
-				},
-				tencentSMSParams: {
-					sdkAppId: "",
-					sign: "",
-					templateId: "",
-					accessKeyId: "",
-					accessKeySecret: ""
 				}
 			}
 		}
 
-		if (config.aliyunSMSParams == null) {
-			Vue.set(config, "aliyunSMSParams", {
-				sign: "",
-				templateCode: "",
-				codeVarName: "code",
-				accessKeyId: "",
-				accessKeySecret: ""
-			})
-		}
-		if (config.tencentSMSParams == null) {
-			Vue.set(config, "tencentSMSParams",  {
-				sdkAppId: "",
-				sign: "",
-				templateId: "",
-				accessKeyId: "",
-				accessKeySecret: ""
-			})
-		}
-
 		return {
-			config: config
+			config: value
 		}
 	},
 	watch: {
@@ -17270,109 +17192,29 @@ Vue.component("sms-sender", {
 				<td>发送渠道</td>
 				<td>
 					<select class="ui dropdown auto-width" v-model="config.type">
-						<option value="webHook">自定义HTTP接口</option>
-						<option value="aliyunSMS">阿里云短信</option>
-						<option value="tencentSMS">腾讯云短信</option>
+						<option value="webHook">WebHook</option>
 					</select>
-					<p class="comment" v-if="config.type == 'webHook'">通过HTTP接口的方式调用你的自定义发送短信接口。</p>
-					<p class="comment" v-if="config.type == 'aliyunSMS'">通过阿里云短信服务发送短信接口；<strong>目前仅支持发送验证码</strong>。</p>
-					<p class="comment" v-if="config.type == 'tencentSMS'">通过腾讯云短信服务发送短信接口；<strong>目前仅支持发送验证码</strong>。</p>
+					<p class="comment" v-if="config.type">通过WebHook的方式调用你的自定义发送短信接口。</p>
 				</td>				
 			</tr>
-			
-			<!-- webhook -->
 			<tr v-if="config.type == 'webHook' && config.webHookParams != null">
-				<td class="color-border">HTTP接口的URL地址 *</td>
+				<td class="color-border">WebHook URL地址 *</td>
 				<td>
 					<input type="text" maxlength="100" placeholder="https://..." v-model="config.webHookParams.url"/>
 					<p class="comment">接收发送短信请求的URL，必须以<code-label>http://</code-label>或<code-label>https://</code-label>开头。</p>
 				</td>
 			</tr>
 			<tr v-if="config.type == 'webHook' && config.webHookParams != null">
-				<td class="color-border">HTTP接口的请求方法</td>
+				<td class="color-border">WebHook请求方法</td>
 				<td>
 					<select class="ui dropdown auto-width" v-model="config.webHookParams.method">
 						<option value="GET">GET</option>
 						<option value="POST">POST</option>
 					</select>
-					<p class="comment" v-if="config.webHookParams.method == 'GET'">以在URL参数中加入mobile、body和code三个参数（<code-label>YOUR_API_URL?mobile=手机号&amp;body=短信内容&code=验证码</code-label>)的方式调用你的HTTP接口的URL地址；状态码返回200表示成功。</p>
-					<p class="comment" v-if="config.webHookParams.method == 'POST'">通过POST表单发送mobile、body和code三个参数（<code-label>mobile=手机号&amp;body=短信内容&code=验证码</code-label>）的方式调用你的HTTP接口URL地址；状态码返回200表示成功。</p>
+					<p class="comment" v-if="config.webHookParams.method == 'GET'">以在URL参数中加入mobile、body和code三个参数（<code-label>YOUR_WEB_HOOK_URL?mobile=手机号&amp;body=短信内容&code=验证码</code-label>)的方式调用你的WebHook URL地址；状态码返回200表示成功。</p>
+					<p class="comment" v-if="config.webHookParams.method == 'POST'">通过POST表单发送mobile、body和code三个参数（<code-label>mobile=手机号&amp;body=短信内容&code=验证码</code-label>）的方式调用你的WebHook URL地址；状态码返回200表示成功。</p>
 				</td>
 			</tr>
-			
-			<!-- aliyun sms -->
-			<tr v-if="config.type == 'aliyunSMS'">
-				<td class="color-border">签名名称 *</td>
-				<td><input type="text" v-model="config.aliyunSMSParams.sign" maxlength="12"/>
-					<p class="comment">在阿里云短信服务 “签名管理” 中添加并通过审核后才能使用。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'aliyunSMS'">
-				<td class="color-border">模板CODE *</td>
-				<td>
-					<input type="text" v-model="config.aliyunSMSParams.templateCode" maxlength="30"/>
-					<p class="comment">在阿里云短信服务 “模板管理” 中添加并通过审核后才能使用。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'aliyunSMS'">
-				<td class="color-border">模板中验证码变量名称 *</td>
-				<td>
-					<input type="text" v-model="config.aliyunSMSParams.codeVarName" maxlength="30"/>
-					<p class="comment">默认为<code-label>code</code-label>，不需要带\${}等符号，即表示在模板中使用<code-label>\${<span>{{ config.aliyunSMSParams.codeVarName }}</span>}</code-label>代表要发送的验证码。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'aliyunSMS'">
-				<td class="color-border">AccessKey ID *</td>
-				<td>
-					<input type="text" v-model="config.aliyunSMSParams.accessKeyId" maxlength="100"/>
-					<p class="comment">在阿里云 -- RAM访问控制 -- AccessKey中可以创建和获取。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'aliyunSMS'">
-				<td class="color-border">AccessKey Secret *</td>
-				<td>
-					<input type="text" v-model="config.aliyunSMSParams.accessKeySecret" maxlength="100"/>
-					<p class="comment">和表单中的AccessKey ID对应，在阿里云 -- RAM访问控制 -- AccessKey中可以创建和获取。</p>
-				</td>
-			</tr>
-			
-			<!-- tencent sms -->
-			<tr v-if="config.type == 'tencentSMS'">
-				<td>SDK应用ID *</td>
-				<td>
-					<input type="text" v-model="config.tencentSMSParams.sdkAppId" maxlength="30"/>
-					<p class="comment">在腾讯云 -- 短信 -- 应用管理 -- 应用列表中可以查看。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'tencentSMS'">
-				<td>签名内容 *</td>
-				<td>
-					<input type="text" v-model="config.tencentSMSParams.sign" maxlength="12"/>
-					<p class="comment">比如“腾讯云”，在腾讯云 -- 短信 -- 签名管理中可以查看。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'tencentSMS'">
-				<td>正文模板ID *</td>
-				<td>
-					<input type="text" v-model="config.tencentSMSParams.templateId" maxlength="50"/>
-					<p class="comment">在腾讯云 -- 短信 -- 正文模板管理中可以查看。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'tencentSMS'">
-				<td>密钥SecretId *</td>
-				<td>
-					<input type="text" v-model="config.tencentSMSParams.accessKeyId"/>
-					<p class="comment">同SecretKey一同在腾讯云 -- 访问管理 -- API密钥管理中获取。</p>
-				</td>
-			</tr>
-			<tr v-if="config.type == 'tencentSMS'">
-				<td>密钥SecretKey *</td>
-				<td>
-					<input type="text" v-model="config.tencentSMSParams.accessKeySecret"/>
-					<p class="comment">同SecretId一同在腾讯云 -- 访问管理 -- API密钥管理中获取。</p>
-				</td>
-			</tr>
-			
 			<tr>
 				<td>发送测试</td>
 				<td><a href="" @click.prevent="test">[点此测试]</a></td>
@@ -19075,7 +18917,7 @@ Vue.component("health-check-config-box", {
 			</td>
 		</tr>
 		<tr>
-			<td>自动上/下线<span v-if="vIsPlus">IP</span></td>
+			<td>自动下线<span v-if="vIsPlus">IP</span></td>
 			<td>
 				<div class="ui checkbox">
 					<input type="checkbox" value="1" v-model="healthCheck.autoDown"/>
@@ -21047,8 +20889,8 @@ Vue.component("node-ip-addresses-box", {
 		<div>
 			<div v-for="(address, index) in ipAddresses" class="ui label tiny basic">
 				<span v-if="isIPv6(address.ip)" class="grey">[IPv6]</span> {{address.ip}}
-				<span class="small grey" v-if="address.name.length > 0">（备注：{{address.name}}<span v-if="!address.canAccess">，不公开访问</span>）</span>
-				<span class="small grey" v-if="address.name.length == 0 && !address.canAccess">（不公开访问）</span>
+				<span class="small grey" v-if="address.name.length > 0">（备注：{{address.name}}<span v-if="!address.canAccess">，不可访问</span>）</span>
+				<span class="small grey" v-if="address.name.length == 0 && !address.canAccess">（不可访问）</span>
 				<span class="small red" v-if="!address.isOn" title="未启用">[off]</span>
 				<span class="small red" v-if="!address.isUp" title="已下线">[down]</span>
 				<span class="small" v-if="address.thresholds != null && address.thresholds.length > 0">[{{address.thresholds.length}}个阈值]</span>
@@ -22778,7 +22620,7 @@ Vue.component("ad-instance-objects-box", {
 				<td class="title">对象类型</td>
 				<td>网站</td>
 			</tr>
-			<!-- 网站列表 -->
+			<!-- 服务列表 -->
 			<tr>
 				<td>网站列表</td>
 				<td>
@@ -22893,7 +22735,7 @@ window.REQUEST_COND_COMPONENTS = [{"type":"url-extension","name":"文件扩展�
 
 window.REQUEST_COND_OPERATORS = [{"description":"判断是否正则表达式匹配","name":"正则表达式匹配","op":"regexp"},{"description":"判断是否正则表达式不匹配","name":"正则表达式不匹配","op":"not regexp"},{"description":"判断是否和指定的通配符匹配","name":"通配符匹配","op":"wildcard match"},{"description":"判断是否和指定的通配符不匹配","name":"通配符不匹配","op":"wildcard not match"},{"description":"使用字符串对比参数值是否相等于某个值","name":"字符串等于","op":"eq"},{"description":"参数值包含某个前缀","name":"字符串前缀","op":"prefix"},{"description":"参数值包含某个后缀","name":"字符串后缀","op":"suffix"},{"description":"参数值包含另外一个字符串","name":"字符串包含","op":"contains"},{"description":"参数值不包含另外一个字符串","name":"字符串不包含","op":"not contains"},{"description":"使用字符串对比参数值是否不相等于某个值","name":"字符串不等于","op":"not"},{"description":"判断参数值在某个列表中","name":"在列表中","op":"in"},{"description":"判断参数值不在某个列表中","name":"不在列表中","op":"not in"},{"description":"判断小写的扩展名（不带点）在某个列表中","name":"扩展名","op":"file ext"},{"description":"判断MimeType在某个列表中，支持类似于image/*的语法","name":"MimeType","op":"mime type"},{"description":"判断版本号在某个范围内，格式为version1,version2","name":"版本号范围","op":"version range"},{"description":"将参数转换为整数数字后进行对比","name":"整数等于","op":"eq int"},{"description":"将参数转换为可以有小数的浮点数字进行对比","name":"浮点数等于","op":"eq float"},{"description":"将参数转换为数字进行对比","name":"数字大于","op":"gt"},{"description":"将参数转换为数字进行对比","name":"数字大于等于","op":"gte"},{"description":"将参数转换为数字进行对比","name":"数字小于","op":"lt"},{"description":"将参数转换为数字进行对比","name":"数字小于等于","op":"lte"},{"description":"对整数参数值取模，除数为10，对比值为余数","name":"整数取模10","op":"mod 10"},{"description":"对整数参数值取模，除数为100，对比值为余数","name":"整数取模100","op":"mod 100"},{"description":"对整数参数值取模，对比值格式为：除数,余数，比如10,1","name":"整数取模","op":"mod"},{"description":"将参数转换为IP进行对比","name":"IP等于","op":"eq ip"},{"description":"将参数转换为IP进行对比","name":"IP大于","op":"gt ip"},{"description":"将参数转换为IP进行对比","name":"IP大于等于","op":"gte ip"},{"description":"将参数转换为IP进行对比","name":"IP小于","op":"lt ip"},{"description":"将参数转换为IP进行对比","name":"IP小于等于","op":"lte ip"},{"description":"IP在某个范围之内，范围格式可以是英文逗号分隔的\u003ccode-label\u003e开始IP,结束IP\u003c/code-label\u003e，比如\u003ccode-label\u003e192.168.1.100,192.168.2.200\u003c/code-label\u003e，或者CIDR格式的ip/bits，比如\u003ccode-label\u003e192.168.2.1/24\u003c/code-label\u003e","name":"IP范围","op":"ip range"},{"description":"对IP参数值取模，除数为10，对比值为余数","name":"IP取模10","op":"ip mod 10"},{"description":"对IP参数值取模，除数为100，对比值为余数","name":"IP取模100","op":"ip mod 100"},{"description":"对IP参数值取模，对比值格式为：除数,余数，比如10,1","name":"IP取模","op":"ip mod"}];
 
-window.REQUEST_VARIABLES = [{"code":"${edgeVersion}","description":"","name":"边缘节点版本"},{"code":"${remoteAddr}","description":"会依次根据X-Forwarded-For、X-Real-IP、RemoteAddr获取，适合前端有别的反向代理服务时使用，存在伪造的风险","name":"客户端地址（IP）"},{"code":"${rawRemoteAddr}","description":"返回直接连接服务的客户端原始IP地址","name":"客户端地址（IP）"},{"code":"${remotePort}","description":"","name":"客户端端口"},{"code":"${remoteUser}","description":"","name":"客户端用户名"},{"code":"${requestURI}","description":"比如/hello?name=lily","name":"请求URI"},{"code":"${requestPath}","description":"比如/hello","name":"请求路径（不包括参数）"},{"code":"${requestURL}","description":"比如https://example.com/hello?name=lily","name":"完整的请求URL"},{"code":"${requestLength}","description":"","name":"请求内容长度"},{"code":"${requestMethod}","description":"比如GET、POST","name":"请求方法"},{"code":"${requestFilename}","description":"","name":"请求文件路径"},{"code":"${requestPathExtension}","description":"请求路径中的文件扩展名，包括点符号，比如.html、.png","name":"请求文件扩展名"},{"code":"${requestPathLowerExtension}","description":"请求路径中的文件扩展名，其中大写字母会被自动转换为小写，包括点符号，比如.html、.png","name":"请求文件小写扩展名"},{"code":"${scheme}","description":"","name":"请求协议，http或https"},{"code":"${proto}","description:":"类似于HTTP/1.0","name":"包含版本的HTTP请求协议"},{"code":"${timeISO8601}","description":"比如2018-07-16T23:52:24.839+08:00","name":"ISO 8601格式的时间"},{"code":"${timeLocal}","description":"比如17/Jul/2018:09:52:24 +0800","name":"本地时间"},{"code":"${msec}","description":"比如1531756823.054","name":"带有毫秒的时间"},{"code":"${timestamp}","description":"","name":"unix时间戳，单位为秒"},{"code":"${host}","description":"","name":"主机名"},{"code":"${cname}","description":"比如38b48e4f.cdn.foyeseo.com","name":"当前网站的CNAME"},{"code":"${serverName}","description":"","name":"接收请求的服务器名"},{"code":"${serverPort}","description":"","name":"接收请求的服务器端口"},{"code":"${referer}","description":"","name":"请求来源URL"},{"code":"${referer.host}","description":"","name":"请求来源URL域名"},{"code":"${userAgent}","description":"","name":"客户端信息"},{"code":"${contentType}","description":"","name":"请求头部的Content-Type"},{"code":"${cookies}","description":"","name":"所有cookie组合字符串"},{"code":"${cookie.NAME}","description":"","name":"单个cookie值"},{"code":"${isArgs}","description":"如果URL有参数，则值为`?`；否则，则值为空","name":"问号（?）标记"},{"code":"${args}","description":"","name":"所有参数组合字符串"},{"code":"${arg.NAME}","description":"","name":"单个参数值"},{"code":"${headers}","description":"","name":"所有Header信息组合字符串"},{"code":"${header.NAME}","description":"","name":"单个Header值"},{"code":"${geo.country.name}","description":"","name":"国家/地区名称"},{"code":"${geo.country.id}","description":"","name":"国家/地区ID"},{"code":"${geo.province.name}","description":"目前只包含中国省份","name":"省份名称"},{"code":"${geo.province.id}","description":"目前只包含中国省份","name":"省份ID"},{"code":"${geo.city.name}","description":"目前只包含中国城市","name":"城市名称"},{"code":"${geo.city.id}","description":"目前只包含中国城市","name":"城市名称"},{"code":"${isp.name}","description":"","name":"ISP服务商名称"},{"code":"${isp.id}","description":"","name":"ISP服务商ID"},{"code":"${browser.os.name}","description":"客户端所在操作系统名称","name":"操作系统名称"},{"code":"${browser.os.version}","description":"客户端所在操作系统版本","name":"操作系统版本"},{"code":"${browser.name}","description":"客户端浏览器名称","name":"浏览器名称"},{"code":"${browser.version}","description":"客户端浏览器版本","name":"浏览器版本"},{"code":"${browser.isMobile}","description":"如果客户端是手机，则值为1，否则为0","name":"手机标识"}];
+window.REQUEST_VARIABLES = [{"code":"${edgeVersion}","description":"","name":"边缘节点版本"},{"code":"${remoteAddr}","description":"会依次根据X-Forwarded-For、X-Real-IP、RemoteAddr获取，适合前端有别的反向代理服务时使用，存在伪造的风险","name":"客户端地址（IP）"},{"code":"${rawRemoteAddr}","description":"返回直接连接服务的客户端原始IP地址","name":"客户端地址（IP）"},{"code":"${remotePort}","description":"","name":"客户端端口"},{"code":"${remoteUser}","description":"","name":"客户端用户名"},{"code":"${requestURI}","description":"比如/hello?name=lily","name":"请求URI"},{"code":"${requestPath}","description":"比如/hello","name":"请求路径（不包括参数）"},{"code":"${requestURL}","description":"比如https://example.com/hello?name=lily","name":"完整的请求URL"},{"code":"${requestLength}","description":"","name":"请求内容长度"},{"code":"${requestMethod}","description":"比如GET、POST","name":"请求方法"},{"code":"${requestFilename}","description":"","name":"请求文件路径"},{"code":"${requestPathExtension}","description":"请求路径中的文件扩展名，包括点符号，比如.html、.png","name":"请求文件扩展名"},{"code":"${requestPathLowerExtension}","description":"请求路径中的文件扩展名，其中大写字母会被自动转换为小写，包括点符号，比如.html、.png","name":"请求文件小写扩展名"},{"code":"${scheme}","description":"","name":"请求协议，http或https"},{"code":"${proto}","description:":"类似于HTTP/1.0","name":"包含版本的HTTP请求协议"},{"code":"${timeISO8601}","description":"比如2018-07-16T23:52:24.839+08:00","name":"ISO 8601格式的时间"},{"code":"${timeLocal}","description":"比如17/Jul/2018:09:52:24 +0800","name":"本地时间"},{"code":"${msec}","description":"比如1531756823.054","name":"带有毫秒的时间"},{"code":"${timestamp}","description":"","name":"unix时间戳，单位为秒"},{"code":"${host}","description":"","name":"主机名"},{"code":"${cname}","description":"比如38b48e4f.goedge.cn","name":"当前网站的CNAME"},{"code":"${serverName}","description":"","name":"接收请求的服务器名"},{"code":"${serverPort}","description":"","name":"接收请求的服务器端口"},{"code":"${referer}","description":"","name":"请求来源URL"},{"code":"${referer.host}","description":"","name":"请求来源URL域名"},{"code":"${userAgent}","description":"","name":"客户端信息"},{"code":"${contentType}","description":"","name":"请求头部的Content-Type"},{"code":"${cookies}","description":"","name":"所有cookie组合字符串"},{"code":"${cookie.NAME}","description":"","name":"单个cookie值"},{"code":"${isArgs}","description":"如果URL有参数，则值为`?`；否则，则值为空","name":"问号（?）标记"},{"code":"${args}","description":"","name":"所有参数组合字符串"},{"code":"${arg.NAME}","description":"","name":"单个参数值"},{"code":"${headers}","description":"","name":"所有Header信息组合字符串"},{"code":"${header.NAME}","description":"","name":"单个Header值"},{"code":"${geo.country.name}","description":"","name":"国家/地区名称"},{"code":"${geo.country.id}","description":"","name":"国家/地区ID"},{"code":"${geo.province.name}","description":"目前只包含中国省份","name":"省份名称"},{"code":"${geo.province.id}","description":"目前只包含中国省份","name":"省份ID"},{"code":"${geo.city.name}","description":"目前只包含中国城市","name":"城市名称"},{"code":"${geo.city.id}","description":"目前只包含中国城市","name":"城市名称"},{"code":"${isp.name}","description":"","name":"ISP服务商名称"},{"code":"${isp.id}","description":"","name":"ISP服务商ID"},{"code":"${browser.os.name}","description":"客户端所在操作系统名称","name":"操作系统名称"},{"code":"${browser.os.version}","description":"客户端所在操作系统版本","name":"操作系统版本"},{"code":"${browser.name}","description":"客户端浏览器名称","name":"浏览器名称"},{"code":"${browser.version}","description":"客户端浏览器版本","name":"浏览器版本"},{"code":"${browser.isMobile}","description":"如果客户端是手机，则值为1，否则为0","name":"手机标识"}];
 
 window.METRIC_HTTP_KEYS = [{"name":"客户端地址（IP）","code":"${remoteAddr}","description":"会依次根据X-Forwarded-For、X-Real-IP、RemoteAddr获取，适用于前端可能有别的反向代理的情形，存在被伪造的可能","icon":""},{"name":"直接客户端地址（IP）","code":"${rawRemoteAddr}","description":"返回直接连接服务的客户端原始IP地址","icon":""},{"name":"客户端用户名","code":"${remoteUser}","description":"通过基本认证填入的用户名","icon":""},{"name":"请求URI","code":"${requestURI}","description":"包含参数，比如/hello?name=lily","icon":""},{"name":"请求路径","code":"${requestPath}","description":"不包含参数，比如/hello","icon":""},{"name":"完整URL","code":"${requestURL}","description":"比如https://example.com/hello?name=lily","icon":""},{"name":"请求方法","code":"${requestMethod}","description":"比如GET、POST等","icon":""},{"name":"请求协议Scheme","code":"${scheme}","description":"http或https","icon":""},{"name":"文件扩展名","code":"${requestPathExtension}","description":"请求路径中的文件扩展名，包括点符号，比如.html、.png","icon":""},{"name":"小写文件扩展名","code":"${requestPathLowerExtension}","description":"请求路径中的文件扩展名小写形式，包括点符号，比如.html、.png","icon":""},{"name":"主机名","code":"${host}","description":"通常是请求的域名","icon":""},{"name":"HTTP协议","code":"${proto}","description":"包含版本的HTTP请求协议，类似于HTTP/1.0","icon":""},{"name":"URL参数值","code":"${arg.NAME}","description":"单个URL参数值","icon":""},{"name":"请求来源URL","code":"${referer}","description":"请求来源Referer URL","icon":""},{"name":"请求来源URL域名","code":"${referer.host}","description":"请求来源Referer URL域名","icon":""},{"name":"Header值","code":"${header.NAME}","description":"单个Header值，比如${header.User-Agent}","icon":""},{"name":"Cookie值","code":"${cookie.NAME}","description":"单个cookie值，比如${cookie.sid}","icon":""},{"name":"状态码","code":"${status}","description":"","icon":""},{"name":"响应的Content-Type值","code":"${response.contentType}","description":"","icon":""}];
 
@@ -22901,9 +22743,9 @@ window.IP_ADDR_THRESHOLD_ITEMS = [{"code":"nodeAvgRequests","description":"当�
 
 window.IP_ADDR_THRESHOLD_ACTIONS = [{"code":"up","description":"上线当前IP。","name":"上线"},{"code":"down","description":"下线当前IP。","name":"下线"},{"code":"notify","description":"发送已达到阈值通知。","name":"通知"},{"code":"switch","description":"在DNS中记录中将IP切换到指定的备用IP。","name":"切换"},{"code":"webHook","description":"调用外部的WebHook。","name":"WebHook"}];
 
-window.WAF_RULE_CHECKPOINTS = [{"description":"通用报头比如Cache-Control、Accept之类的长度限制，防止缓冲区溢出攻击。","name":"通用请求报头长度限制","prefix":"requestGeneralHeaderLength"},{"description":"通用报头比如Cache-Control、Date之类的长度限制，防止缓冲区溢出攻击。","name":"通用响应报头长度限制","prefix":"responseGeneralHeaderLength"},{"description":"试图通过分析X-Forwarded-For等报头获取的客户端地址，比如192.168.1.100，存在伪造的可能。","name":"客户端地址（IP）","prefix":"remoteAddr"},{"description":"直接连接的客户端地址，比如192.168.1.100。","name":"客户端源地址（IP）","prefix":"rawRemoteAddr"},{"description":"直接连接的客户端地址端口。","name":"客户端端口","prefix":"remotePort"},{"description":"通过BasicAuth登录的客户端用户名。","name":"客户端用户名","prefix":"remoteUser"},{"description":"包含URL参数的请求URI，类似于 /hello/world?lang=go，不包含域名部分。","name":"请求URI","prefix":"requestURI"},{"description":"不包含URL参数的请求路径，类似于 /hello/world，不包含域名部分。","name":"请求路径","prefix":"requestPath"},{"description":"完整的请求URL，包含协议、域名、请求路径、参数等，类似于 https://example.com/hello?name=lily 。","name":"请求完整URL","prefix":"requestURL"},{"description":"请求报头中的Content-Length。","name":"请求内容长度","prefix":"requestLength"},{"description":"通常在POST或者PUT等操作时会附带请求体，最大限制32M。","name":"请求体内容","prefix":"requestBody"},{"description":"${requestURI}和${requestBody}组合。","name":"请求URI和请求体组合","prefix":"requestAll"},{"description":"获取POST或者其他方法发送的表单参数，最大请求体限制32M。","name":"请求表单参数","prefix":"requestForm"},{"description":"获取POST上传的文件信息，最大请求体限制32M。","name":"上传文件","prefix":"requestUpload"},{"description":"获取POST或者其他方法发送的JSON，最大请求体限制32M，使用点（.）符号表示多级数据。","name":"请求JSON参数","prefix":"requestJSON"},{"description":"比如GET、POST。","name":"请求方法","prefix":"requestMethod"},{"description":"比如http或https。","name":"请求协议","prefix":"scheme"},{"description":"比如HTTP/1.1。","name":"HTTP协议版本","prefix":"proto"},{"description":"比如example.com。","name":"主机名","prefix":"host"},{"description":"当前网站服务CNAME，比如38b48e4f.example.com。","name":"CNAME","prefix":"cname"},{"description":"是否为CNAME，值为1（是）或0（否）。","name":"是否为CNAME","prefix":"isCNAME"},{"description":"请求报头中的Referer和Origin值。","name":"请求来源","prefix":"refererOrigin"},{"description":"请求报头中的Referer值。","name":"请求来源Referer","prefix":"referer"},{"description":"比如Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103。","name":"客户端信息","prefix":"userAgent"},{"description":"请求报头的Content-Type。","name":"内容类型","prefix":"contentType"},{"description":"比如sid=IxZVPFhE\u0026city=beijing\u0026uid=18237。","name":"所有cookie组合字符串","prefix":"cookies"},{"description":"单个cookie值。","name":"单个cookie值","prefix":"cookie"},{"description":"比如name=lu\u0026age=20。","name":"所有URL参数组合","prefix":"args"},{"description":"单个URL参数值。","name":"单个URL参数值","prefix":"arg"},{"description":"使用换行符（\\n）隔开的报头内容字符串，每行均为\"NAME: VALUE格式\"。","name":"所有请求报头内容","prefix":"headers"},{"description":"使用换行符（\\n）隔开的报头名称字符串，每行一个名称。","name":"所有请求报头名称","prefix":"headerNames"},{"description":"单个报头值。","name":"单个请求报头值","prefix":"header"},{"description":"最长的请求报头的长度。","name":"请求报头最大长度","prefix":"headerMaxLength"},{"description":"当前客户端所处国家/地区名称。","name":"国家/地区名称","prefix":"geoCountryName"},{"description":"当前客户端所处中国省份名称。","name":"省份名称","prefix":"geoProvinceName"},{"description":"当前客户端所处中国城市名称。","name":"城市名称","prefix":"geoCityName"},{"description":"当前客户端所处ISP名称。","name":"ISP名称","prefix":"ispName"},{"description":"对统计对象进行统计。","name":"CC统计","prefix":"cc2"},{"description":"对统计对象进行统计。","name":"防盗链","prefix":"refererBlock"},{"description":"统计某段时间段内的请求信息（不推荐再使用，请使用新的CC2统计代替）。","name":"CC统计（旧）","prefix":"cc"},{"description":"响应状态码，比如200、404、500。","name":"响应状态码","prefix":"status"},{"description":"响应报头值。","name":"响应报头","prefix":"responseHeader"},{"description":"响应内容字符串。","name":"响应内容","prefix":"responseBody"},{"description":"响应内容长度，通过响应的报头Content-Length获取。","name":"响应内容长度","prefix":"bytesSent"}];
+window.WAF_RULE_CHECKPOINTS = [{"description":"通用报头比如Cache-Control、Accept之类的长度限制，防止缓冲区溢出攻击。","name":"通用请求报头长度限制","prefix":"requestGeneralHeaderLength"},{"description":"通用报头比如Cache-Control、Date之类的长度限制，防止缓冲区溢出攻击。","name":"通用响应报头长度限制","prefix":"responseGeneralHeaderLength"},{"description":"试图通过分析X-Forwarded-For等报头获取的客户端地址，比如192.168.1.100，存在伪造的可能。","name":"客户端地址（IP）","prefix":"remoteAddr"},{"description":"直接连接的客户端地址，比如192.168.1.100。","name":"客户端源地址（IP）","prefix":"rawRemoteAddr"},{"description":"直接连接的客户端地址端口。","name":"客户端端口","prefix":"remotePort"},{"description":"通过BasicAuth登录的客户端用户名。","name":"客户端用户名","prefix":"remoteUser"},{"description":"包含URL参数的请求URI，类似于 /hello/world?lang=go，不包含域名部分。","name":"请求URI","prefix":"requestURI"},{"description":"不包含URL参数的请求路径，类似于 /hello/world，不包含域名部分。","name":"请求路径","prefix":"requestPath"},{"description":"完整的请求URL，包含协议、域名、请求路径、参数等，类似于 https://example.com/hello?name=lily 。","name":"请求完整URL","prefix":"requestURL"},{"description":"请求报头中的Content-Length。","name":"请求内容长度","prefix":"requestLength"},{"description":"通常在POST或者PUT等操作时会附带请求体，最大限制32M。","name":"请求体内容","prefix":"requestBody"},{"description":"${requestURI}和${requestBody}组合。","name":"请求URI和请求体组合","prefix":"requestAll"},{"description":"获取POST或者其他方法发送的表单参数，最大请求体限制32M。","name":"请求表单参数","prefix":"requestForm"},{"description":"获取POST上传的文件信息，最大请求体限制32M。","name":"上传文件","prefix":"requestUpload"},{"description":"获取POST或者其他方法发送的JSON，最大请求体限制32M，使用点（.）符号表示多级数据。","name":"请求JSON参数","prefix":"requestJSON"},{"description":"比如GET、POST。","name":"请求方法","prefix":"requestMethod"},{"description":"比如http或https。","name":"请求协议","prefix":"scheme"},{"description":"比如HTTP/1.1。","name":"HTTP协议版本","prefix":"proto"},{"description":"比如example.com。","name":"主机名","prefix":"host"},{"description":"当前网站服务CNAME，比如38b48e4f.example.com。","name":"CNAME","prefix":"cname"},{"description":"是否为CNAME，值为1（是）或0（否）。","name":"是否为CNAME","prefix":"isCNAME"},{"description":"请求报头中的Referer和Origin值。","name":"请求来源","prefix":"refererOrigin"},{"description":"请求报头中的Referer值。","name":"请求来源Referer","prefix":"referer"},{"description":"比如Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103。","name":"客户端信息","prefix":"userAgent"},{"description":"请求报头的Content-Type。","name":"内容类型","prefix":"contentType"},{"description":"比如sid=IxZVPFhE\u0026city=beijing\u0026uid=18237。","name":"所有cookie组合字符串","prefix":"cookies"},{"description":"单个cookie值。","name":"单个cookie值","prefix":"cookie"},{"description":"比如name=lu\u0026age=20。","name":"所有URL参数组合","prefix":"args"},{"description":"单个URL参数值。","name":"单个URL参数值","prefix":"arg"},{"description":"使用换行符（\\n）隔开的报头内容字符串，每行均为\"NAME: VALUE格式\"。","name":"所有请求报头内容","prefix":"headers"},{"description":"使用换行符（\\n）隔开的报头名称字符串，每行一个名称。","name":"所有请求报头名称","prefix":"headerNames"},{"description":"单个报头值。","name":"单个请求报头值","prefix":"header"},{"description":"当前客户端所处国家/地区名称。","name":"国家/地区名称","prefix":"geoCountryName"},{"description":"当前客户端所处中国省份名称。","name":"省份名称","prefix":"geoProvinceName"},{"description":"当前客户端所处中国城市名称。","name":"城市名称","prefix":"geoCityName"},{"description":"当前客户端所处ISP名称。","name":"ISP名称","prefix":"ispName"},{"description":"对统计对象进行统计。","name":"CC统计","prefix":"cc2"},{"description":"对统计对象进行统计。","name":"防盗链","prefix":"refererBlock"},{"description":"统计某段时间段内的请求信息（不推荐再使用，请使用新的CC2统计代替）。","name":"CC统计（旧）","prefix":"cc"},{"description":"响应状态码，比如200、404、500。","name":"响应状态码","prefix":"status"},{"description":"响应报头值。","name":"响应报头","prefix":"responseHeader"},{"description":"响应内容字符串。","name":"响应内容","prefix":"responseBody"},{"description":"响应内容长度，通过响应的报头Content-Length获取。","name":"响应内容长度","prefix":"bytesSent"}];
 
-window.WAF_RULE_OPERATORS = [{"name":"正则匹配","code":"match","description":"使用正则表达式匹配，在头部使用(?i)表示不区分大小写，\u003ca href=\"https://cdn.foyeseo.com/docs/Appendix/Regexp/Index.md\" target=\"_blank\"\u003e正则表达式语法 \u0026raquo;\u003c/a\u003e。","caseInsensitive":"yes","dataType":"regexp"},{"name":"正则不匹配","code":"not match","description":"使用正则表达式不匹配，在头部使用(?i)表示不区分大小写，\u003ca href=\"https://cdn.foyeseo.com/docs/Appendix/Regexp/Index.md\" target=\"_blank\"\u003e正则表达式语法 \u0026raquo;\u003c/a\u003e。","caseInsensitive":"yes","dataType":"regexp"},{"name":"通配符匹配","code":"wildcard match","description":"判断是否和指定的通配符匹配，可以在对比值中使用星号通配符（*）表示任意字符。","caseInsensitive":"yes","dataType":"wildcard"},{"name":"通配符不匹配","code":"wildcard not match","description":"判断是否和指定的通配符不匹配，可以在对比值中使用星号通配符（*）表示任意字符。","caseInsensitive":"yes","dataType":"wildcard"},{"name":"字符串等于","code":"eq string","description":"使用字符串对比等于。","caseInsensitive":"no","dataType":"string"},{"name":"字符串不等于","code":"neq string","description":"使用字符串对比不等于。","caseInsensitive":"no","dataType":"string"},{"name":"包含字符串","code":"contains","description":"包含某个字符串，比如Hello World包含了World。","caseInsensitive":"no","dataType":"string"},{"name":"不包含字符串","code":"not contains","description":"不包含某个字符串，比如Hello字符串中不包含Hi。","caseInsensitive":"no","dataType":"string"},{"name":"包含任一字符串","code":"contains any","description":"包含字符串列表中的任意一个，比如/hello/world包含/hello和/hi中的/hello，对比值中每行一个字符串。","caseInsensitive":"no","dataType":"strings"},{"name":"包含所有字符串","code":"contains all","description":"包含字符串列表中的所有字符串，比如/hello/world必须包含/hello和/world，对比值中每行一个字符串。","caseInsensitive":"no","dataType":"strings"},{"name":"包含前缀","code":"prefix","description":"包含字符串前缀部分，比如/hello前缀会匹配/hello, /hello/world等。","caseInsensitive":"no","dataType":"string"},{"name":"包含后缀","code":"suffix","description":"包含字符串后缀部分，比如/hello后缀会匹配/hello, /hi/hello等。","caseInsensitive":"no","dataType":"string"},{"name":"包含任一单词","code":"contains any word","description":"包含某个独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"包含所有单词","code":"contains all words","description":"包含所有的独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"不包含任一单词","code":"not contains any word","description":"不包含某个独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"包含SQL注入","code":"contains sql injection","description":"检测字符串内容是否包含SQL注入。","caseInsensitive":"none","dataType":"none"},{"name":"包含SQL注入-严格模式","code":"contains sql injection strictly","description":"更加严格地检测字符串内容是否包含SQL注入，相对于非严格模式，有一定的误报几率。","caseInsensitive":"none","dataType":"none"},{"name":"包含XSS注入","code":"contains xss","description":"检测字符串内容是否包含XSS注入。","caseInsensitive":"none","dataType":"none"},{"name":"包含XSS注入-严格模式","code":"contains xss strictly","description":"更加严格地检测字符串内容是否包含XSS注入，相对于非严格模式，此时xml、audio、video等标签也会被匹配。","caseInsensitive":"none","dataType":"none"},{"name":"包含二进制数据","code":"contains binary","description":"包含一组二进制数据。","caseInsensitive":"no","dataType":"string"},{"name":"不包含二进制数据","code":"not contains binary","description":"不包含一组二进制数据。","caseInsensitive":"no","dataType":"string"},{"name":"数值大于","code":"gt","description":"使用数值对比大于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值大于等于","code":"gte","description":"使用数值对比大于等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值小于","code":"lt","description":"使用数值对比小于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值小于等于","code":"lte","description":"使用数值对比小于等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值等于","code":"eq","description":"使用数值对比等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值不等于","code":"neq","description":"使用数值对比不等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"包含索引","code":"has key","description":"对于一组数据拥有某个键值或者索引。","caseInsensitive":"no","dataType":"string|number"},{"name":"版本号大于","code":"version gt","description":"对比版本号大于。","caseInsensitive":"none","dataType":"version"},{"name":"版本号小于","code":"version lt","description":"对比版本号小于。","caseInsensitive":"none","dataType":"version"},{"name":"版本号范围","code":"version range","description":"判断版本号在某个范围内，格式为 起始version1,结束version2。","caseInsensitive":"none","dataType":"versionRange"},{"name":"IP等于","code":"eq ip","description":"将参数转换为IP进行对比，只能对比单个IP。","caseInsensitive":"none","dataType":"ip"},{"name":"在一组IP中","code":"in ip list","description":"判断参数IP在一组IP内，对比值中每行一个IP。","caseInsensitive":"none","dataType":"ips"},{"name":"IP大于","code":"gt ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP大于等于","code":"gte ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP小于","code":"lt ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP小于等于","code":"lte ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP范围","code":"ip range","description":"IP在某个范围之内，范围格式可以是英文逗号分隔的\u003ccode-label\u003e开始IP,结束IP\u003c/code-label\u003e，比如\u003ccode-label\u003e192.168.1.100,192.168.2.200\u003c/code-label\u003e；或者CIDR格式的ip/bits，比如\u003ccode-label\u003e192.168.2.1/24\u003c/code-label\u003e；或者单个IP。可以填写多行，每行一个IP范围。","caseInsensitive":"none","dataType":"ips"},{"name":"不在IP范围","code":"not ip range","description":"IP不在某个范围之内，范围格式可以是英文逗号分隔的\u003ccode-label\u003e开始IP,结束IP\u003c/code-label\u003e，比如\u003ccode-label\u003e192.168.1.100,192.168.2.200\u003c/code-label\u003e；或者CIDR格式的ip/bits，比如\u003ccode-label\u003e192.168.2.1/24\u003c/code-label\u003e；或者单个IP。可以填写多行，每行一个IP范围。","caseInsensitive":"none","dataType":"ips"},{"name":"IP取模10","code":"ip mod 10","description":"对IP参数值取模，除数为10，对比值为余数。","caseInsensitive":"none","dataType":"number"},{"name":"IP取模100","code":"ip mod 100","description":"对IP参数值取模，除数为100，对比值为余数。","caseInsensitive":"none","dataType":"number"},{"name":"IP取模","code":"ip mod","description":"对IP参数值取模，对比值格式为：除数,余数，比如10,1。","caseInsensitive":"none","dataType":"number"}];
+window.WAF_RULE_OPERATORS = [{"name":"正则匹配","code":"match","description":"使用正则表达式匹配，在头部使用(?i)表示不区分大小写，\u003ca href=\"https://goedge.cn/docs/Appendix/Regexp/Index.md\" target=\"_blank\"\u003e正则表达式语法 \u0026raquo;\u003c/a\u003e。","caseInsensitive":"yes","dataType":"regexp"},{"name":"正则不匹配","code":"not match","description":"使用正则表达式不匹配，在头部使用(?i)表示不区分大小写，\u003ca href=\"https://goedge.cn/docs/Appendix/Regexp/Index.md\" target=\"_blank\"\u003e正则表达式语法 \u0026raquo;\u003c/a\u003e。","caseInsensitive":"yes","dataType":"regexp"},{"name":"通配符匹配","code":"wildcard match","description":"判断是否和指定的通配符匹配，可以在对比值中使用星号通配符（*）表示任意字符。","caseInsensitive":"yes","dataType":"wildcard"},{"name":"通配符不匹配","code":"wildcard not match","description":"判断是否和指定的通配符不匹配，可以在对比值中使用星号通配符（*）表示任意字符。","caseInsensitive":"yes","dataType":"wildcard"},{"name":"字符串等于","code":"eq string","description":"使用字符串对比等于。","caseInsensitive":"no","dataType":"string"},{"name":"字符串不等于","code":"neq string","description":"使用字符串对比不等于。","caseInsensitive":"no","dataType":"string"},{"name":"包含字符串","code":"contains","description":"包含某个字符串，比如Hello World包含了World。","caseInsensitive":"no","dataType":"string"},{"name":"不包含字符串","code":"not contains","description":"不包含某个字符串，比如Hello字符串中不包含Hi。","caseInsensitive":"no","dataType":"string"},{"name":"包含任一字符串","code":"contains any","description":"包含字符串列表中的任意一个，比如/hello/world包含/hello和/hi中的/hello，对比值中每行一个字符串。","caseInsensitive":"no","dataType":"strings"},{"name":"包含所有字符串","code":"contains all","description":"包含字符串列表中的所有字符串，比如/hello/world必须包含/hello和/world，对比值中每行一个字符串。","caseInsensitive":"no","dataType":"strings"},{"name":"包含前缀","code":"prefix","description":"包含字符串前缀部分，比如/hello前缀会匹配/hello, /hello/world等。","caseInsensitive":"no","dataType":"string"},{"name":"包含后缀","code":"suffix","description":"包含字符串后缀部分，比如/hello后缀会匹配/hello, /hi/hello等。","caseInsensitive":"no","dataType":"string"},{"name":"包含任一单词","code":"contains any word","description":"包含某个独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"包含所有单词","code":"contains all words","description":"包含所有的独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"不包含任一单词","code":"not contains any word","description":"不包含某个独立单词，对比值中每行一个单词，比如mozilla firefox里包含了mozilla和firefox两个单词，但是不包含fire和fox这两个单词。","caseInsensitive":"no","dataType":"strings"},{"name":"包含SQL注入","code":"contains sql injection","description":"检测字符串内容是否包含SQL注入。","caseInsensitive":"none","dataType":"none"},{"name":"包含SQL注入-严格模式","code":"contains sql injection strictly","description":"更加严格地检测字符串内容是否包含SQL注入，相对于非严格模式，有一定的误报几率。","caseInsensitive":"none","dataType":"none"},{"name":"包含XSS注入","code":"contains xss","description":"检测字符串内容是否包含XSS注入。","caseInsensitive":"none","dataType":"none"},{"name":"包含XSS注入-严格模式","code":"contains xss strictly","description":"更加严格地检测字符串内容是否包含XSS注入，相对于非严格模式，此时xml、audio、video等标签也会被匹配。","caseInsensitive":"none","dataType":"none"},{"name":"包含二进制数据","code":"contains binary","description":"包含一组二进制数据。","caseInsensitive":"no","dataType":"string"},{"name":"不包含二进制数据","code":"not contains binary","description":"不包含一组二进制数据。","caseInsensitive":"no","dataType":"string"},{"name":"数值大于","code":"gt","description":"使用数值对比大于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值大于等于","code":"gte","description":"使用数值对比大于等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值小于","code":"lt","description":"使用数值对比小于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值小于等于","code":"lte","description":"使用数值对比小于等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值等于","code":"eq","description":"使用数值对比等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"数值不等于","code":"neq","description":"使用数值对比不等于，对比值需要是一个数字。","caseInsensitive":"none","dataType":"number"},{"name":"包含索引","code":"has key","description":"对于一组数据拥有某个键值或者索引。","caseInsensitive":"no","dataType":"string|number"},{"name":"版本号大于","code":"version gt","description":"对比版本号大于。","caseInsensitive":"none","dataType":"version"},{"name":"版本号小于","code":"version lt","description":"对比版本号小于。","caseInsensitive":"none","dataType":"version"},{"name":"版本号范围","code":"version range","description":"判断版本号在某个范围内，格式为 起始version1,结束version2。","caseInsensitive":"none","dataType":"versionRange"},{"name":"IP等于","code":"eq ip","description":"将参数转换为IP进行对比，只能对比单个IP。","caseInsensitive":"none","dataType":"ip"},{"name":"在一组IP中","code":"in ip list","description":"判断参数IP在一组IP内，对比值中每行一个IP。","caseInsensitive":"none","dataType":"ips"},{"name":"IP大于","code":"gt ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP大于等于","code":"gte ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP小于","code":"lt ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP小于等于","code":"lte ip","description":"将参数转换为IP进行对比。","caseInsensitive":"none","dataType":"ip"},{"name":"IP范围","code":"ip range","description":"IP在某个范围之内，范围格式可以是英文逗号分隔的\u003ccode-label\u003e开始IP,结束IP\u003c/code-label\u003e，比如\u003ccode-label\u003e192.168.1.100,192.168.2.200\u003c/code-label\u003e；或者CIDR格式的ip/bits，比如\u003ccode-label\u003e192.168.2.1/24\u003c/code-label\u003e；或者单个IP。可以填写多行，每行一个IP范围。","caseInsensitive":"none","dataType":"ips"},{"name":"不在IP范围","code":"not ip range","description":"IP不在某个范围之内，范围格式可以是英文逗号分隔的\u003ccode-label\u003e开始IP,结束IP\u003c/code-label\u003e，比如\u003ccode-label\u003e192.168.1.100,192.168.2.200\u003c/code-label\u003e；或者CIDR格式的ip/bits，比如\u003ccode-label\u003e192.168.2.1/24\u003c/code-label\u003e；或者单个IP。可以填写多行，每行一个IP范围。","caseInsensitive":"none","dataType":"ips"},{"name":"IP取模10","code":"ip mod 10","description":"对IP参数值取模，除数为10，对比值为余数。","caseInsensitive":"none","dataType":"number"},{"name":"IP取模100","code":"ip mod 100","description":"对IP参数值取模，除数为100，对比值为余数。","caseInsensitive":"none","dataType":"number"},{"name":"IP取模","code":"ip mod","description":"对IP参数值取模，对比值格式为：除数,余数，比如10,1。","caseInsensitive":"none","dataType":"number"}];
 
 window.WAF_CAPTCHA_TYPES = [{"name":"验证码","code":"default","description":"通过输入验证码来验证人机。","icon":""},{"name":"点击验证","code":"oneClick","description":"通过点击界面元素来验证人机。","icon":""},{"name":"滑动解锁","code":"slide","description":"通过滑动方块解锁来验证人机。","icon":""},{"name":"极验-行为验","code":"geetest","description":"使用极验-行为验提供的人机验证方式。","icon":""}];
 

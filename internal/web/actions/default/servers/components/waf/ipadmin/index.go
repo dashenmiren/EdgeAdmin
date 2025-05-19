@@ -2,17 +2,16 @@ package ipadmin
 
 import (
 	"encoding/json"
-	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
+	"strings"
 )
 
 type IndexAction struct {
@@ -42,15 +41,12 @@ func (this *IndexAction) RunGet(params struct {
 	var deniedCountryIds = []int64{}
 	var allowedCountryIds = []int64{}
 	var countryHTML string
-	var allowSearchEngine bool
 	if policyConfig.Inbound != nil && policyConfig.Inbound.Region != nil {
 		deniedCountryIds = policyConfig.Inbound.Region.DenyCountryIds
 		allowedCountryIds = policyConfig.Inbound.Region.AllowCountryIds
 		countryHTML = policyConfig.Inbound.Region.CountryHTML
-		allowSearchEngine = policyConfig.Inbound.Region.AllowSearchEngine
 	}
 	this.Data["countryHTML"] = countryHTML
-	this.Data["allowSearchEngine"] = allowSearchEngine
 
 	countriesResp, err := this.RPC().RegionCountryRPC().FindAllRegionCountries(this.AdminContext(), &pb.FindAllRegionCountriesRequest{})
 	if err != nil {
@@ -98,8 +94,7 @@ func (this *IndexAction) RunPost(params struct {
 	ExceptURLPatternsJSON []byte
 	OnlyURLPatternsJSON   []byte
 
-	CountryHTML       string
-	AllowSearchEngine bool
+	CountryHTML string
 
 	Must *actions.Must
 }) {
@@ -144,7 +139,6 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 	policyConfig.Inbound.Region.CountryHTML = params.CountryHTML
-	policyConfig.Inbound.Region.AllowSearchEngine = params.AllowSearchEngine
 
 	// 限制URL
 	var onlyURLPatterns = []*shared.URLPattern{}

@@ -1,16 +1,15 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package nodeutils
 
 import (
 	"errors"
-	"strconv"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"strconv"
 )
 
 // InitNodeInfo 初始化节点信息
@@ -39,13 +38,12 @@ func InitNodeInfo(parentAction *actionutils.ParentAction, nodeId int64) (*pb.Nod
 	}
 
 	parentAction.Data["node"] = maps.Map{
-		"id":           node.Id,
-		"name":         node.Name,
-		"isOn":         node.IsOn,
-		"isUp":         node.IsUp,
-		"group":        groupMap,
-		"level":        node.Level,
-		"bypassMobile": node.BypassMobile,
+		"id":    node.Id,
+		"name":  node.Name,
+		"isOn":  node.IsOn,
+		"isUp":  node.IsUp,
+		"group": groupMap,
+		"level": node.Level,
 	}
 	var clusterId int64 = 0
 	if node.NodeCluster != nil {

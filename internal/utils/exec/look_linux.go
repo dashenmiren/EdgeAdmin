@@ -1,15 +1,14 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://goedge.cn .
 //go:build linux
 
 package executils
 
 import (
+	"golang.org/x/sys/unix"
 	"io/fs"
 	"os"
 	"os/exec"
 	"syscall"
-
-	"golang.org/x/sys/unix"
 )
 
 // LookPath customize our LookPath() function, to work in broken $PATH environment variable

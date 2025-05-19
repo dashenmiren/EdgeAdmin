@@ -1,11 +1,11 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package ddosProtection
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/messageconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
 )
 
 type StatusAction struct {

@@ -1,12 +1,11 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package domainutils
 
 import (
-	"testing"
-
-	"github.com/dashenmiren/EdgeCommon/pkg/dnsconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/dnsconfigs"
 	"github.com/iwind/TeaGo/assert"
+	"testing"
 )
 
 func TestValidateRecordValue(t *testing.T) {

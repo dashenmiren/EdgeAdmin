@@ -1,4 +1,4 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package dashboardutils
 
@@ -6,20 +6,19 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/iwind/TeaGo/lists"
+	"github.com/iwind/TeaGo/maps"
+	stringutil "github.com/iwind/TeaGo/utils/string"
+	"github.com/shirou/gopsutil/v3/disk"
 	"os"
 	"os/exec"
 	"regexp"
 	"runtime"
 	"strings"
-
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
-	"github.com/dashenmiren/EdgeCommon/pkg/nodeconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/iwind/TeaGo/lists"
-	"github.com/iwind/TeaGo/maps"
-	stringutil "github.com/iwind/TeaGo/utils/string"
-	"github.com/shirou/gopsutil/v3/disk"
 )
 
 // CheckDiskPartitions 检查服务器硬盘空间

@@ -1,4 +1,4 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package apinodeutils
 
@@ -8,17 +8,16 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/iwind/TeaGo/Tea"
+	"github.com/iwind/TeaGo/types"
+	stringutil "github.com/iwind/TeaGo/utils/string"
 	"io"
 	"os"
 	"path/filepath"
 	"runtime"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/configs"
-	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/iwind/TeaGo/Tea"
-	"github.com/iwind/TeaGo/types"
-	stringutil "github.com/iwind/TeaGo/utils/string"
 )
 
 type Progress struct {

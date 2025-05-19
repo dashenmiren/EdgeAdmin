@@ -1,13 +1,13 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 //go:build !plus
 
 package providers
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/rands"
@@ -83,12 +83,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 	ParamEdgeDNSAPIHost            string
 	ParamEdgeDNSAPIAccessKeyId     string
 	ParamEdgeDNSAPIAccessKeySecret string
-
-	// DNS.LA
-	ParamDNSLaAPIId  string
-	ParamDNSLaSecret string
-
-	MinTTL int32
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -175,15 +169,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Require("请输入私钥")
 		apiParams["url"] = params.ParamCustomHTTPURL
 		apiParams["secret"] = params.ParamCustomHTTPSecret
-	case "dnsla":
-		params.Must.
-			Field("paramDNSLaAPIId", params.ParamDNSLaAPIId).
-			Require("请输入API ID").
-			Field("paramDNSLaSecret", params.ParamDNSLaSecret).
-			Require("请输入API密钥")
-
-		apiParams["apiId"] = params.ParamDNSLaAPIId
-		apiParams["secret"] = params.ParamDNSLaSecret
 	default:
 		this.Fail("暂时不支持此服务商'" + params.Type + "'")
 	}
@@ -192,7 +177,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Name:          params.Name,
 		Type:          params.Type,
 		ApiParamsJSON: apiParams.AsJSON(),
-		MinTTL:        params.MinTTL,
 	})
 	if err != nil {
 		this.ErrorPage(err)

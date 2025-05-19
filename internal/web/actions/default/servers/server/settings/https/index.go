@@ -4,19 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"regexp"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/servers/serverutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/configutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/sslconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/serverutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 type IndexAction struct {
@@ -73,7 +71,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["conflictingPorts"] = conflictingPorts
 
 	var sslPolicy *sslconfigs.SSLPolicy
-	var allDNSNames []string
 	if httpsConfig.SSLPolicyRef != nil && httpsConfig.SSLPolicyRef.SSLPolicyId > 0 {
 		sslPolicyConfigResp, err := this.RPC().SSLPolicyRPC().FindEnabledSSLPolicyConfig(this.AdminContext(), &pb.FindEnabledSSLPolicyConfigRequest{
 			SslPolicyId: httpsConfig.SSLPolicyRef.SSLPolicyId,
@@ -90,14 +87,6 @@ func (this *IndexAction) RunGet(params struct {
 			if err != nil {
 				this.ErrorPage(err)
 				return
-			}
-
-			for _, cert := range sslPolicy.Certs {
-				for _, dnsName := range cert.DNSNames {
-					if !lists.ContainsString(allDNSNames, dnsName) {
-						allDNSNames = append(allDNSNames, dnsName)
-					}
-				}
 			}
 		}
 	}
@@ -119,38 +108,6 @@ func (this *IndexAction) RunGet(params struct {
 		"addresses":     httpsConfig.Listen,
 		"sslPolicy":     sslPolicy,
 		"supportsHTTP3": supportsHTTP3,
-	}
-
-	// 检查域名是否都已经上传了证书
-	serverNamesResp, err := this.RPC().ServerRPC().FindServerNames(this.AdminContext(), &pb.FindServerNamesRequest{
-		ServerId: server.Id,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	var allServerNames []string
-	if len(serverNamesResp.ServerNamesJSON) > 0 {
-		var serverNamesConfigs = []*serverconfigs.ServerNameConfig{}
-		err = json.Unmarshal(serverNamesResp.ServerNamesJSON, &serverNamesConfigs)
-		if err != nil {
-			this.ErrorPage(err)
-			return
-		}
-		allServerNames = serverconfigs.PlainServerNames(serverNamesConfigs)
-	}
-
-	this.Data["missingCertServerNames"] = []string{}
-	if len(allServerNames) > 0 {
-		var missingServerNames []string
-		for _, serverName := range allServerNames {
-			if !configutils.MatchDomains(allDNSNames, serverName) {
-				missingServerNames = append(missingServerNames, serverName)
-			}
-		}
-		if len(missingServerNames) > 0 {
-			this.Data["missingCertServerNames"] = missingServerNames
-		}
 	}
 
 	this.Show()

@@ -1,11 +1,10 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package utils_test
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
 )
 
 func TestLookupCNAME(t *testing.T) {

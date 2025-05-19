@@ -1,10 +1,9 @@
 package actionutils
 
 import (
-	"net/http"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/csrf"
+	"github.com/TeaOSLab/EdgeAdmin/internal/csrf"
 	"github.com/iwind/TeaGo/actions"
+	"net/http"
 )
 
 type CSRF struct {

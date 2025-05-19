@@ -6,18 +6,12 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"net"
-	"net/url"
-	"strings"
-	"sync"
-	"time"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/configs"
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/dashenmiren/EdgeAdmin/internal/encrypt"
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeAdmin/internal/encrypt"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/rands"
@@ -28,6 +22,11 @@ import (
 	"google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
+	"net"
+	"net/url"
+	"strings"
+	"sync"
+	"time"
 )
 
 // RPCClient RPC客户端
@@ -384,10 +383,6 @@ func (this *RPCClient) LoginRPC() pb.LoginServiceClient {
 
 func (this *RPCClient) LoginSessionRPC() pb.LoginSessionServiceClient {
 	return pb.NewLoginSessionServiceClient(this.pickConn())
-}
-
-func (this *RPCClient) LoginTicketRPC() pb.LoginTicketServiceClient {
-	return pb.NewLoginTicketServiceClient(this.pickConn())
 }
 
 func (this *RPCClient) NodeTaskRPC() pb.NodeTaskServiceClient {

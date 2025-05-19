@@ -1,14 +1,12 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package iplists
 
 import (
 	"errors"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ipconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -28,12 +26,10 @@ func InitIPList(action *actionutils.ParentAction, listId int64) error {
 
 	var typeName = ""
 	switch list.Type {
-	case ipconfigs.IPListTypeBlack:
+	case "black":
 		typeName = "黑名单"
-	case ipconfigs.IPListTypeWhite:
+	case "white":
 		typeName = "白名单"
-	case ipconfigs.IPListTypeGrey:
-		typeName = "灰名单"
 	}
 
 	// IP数量
@@ -46,7 +42,6 @@ func InitIPList(action *actionutils.ParentAction, listId int64) error {
 	action.Data["list"] = maps.Map{
 		"id":          list.Id,
 		"name":        list.Name,
-		"code":        list.Code,
 		"type":        list.Type,
 		"typeName":    typeName,
 		"description": list.Description,

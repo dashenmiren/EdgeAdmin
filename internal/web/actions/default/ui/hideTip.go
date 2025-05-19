@@ -1,13 +1,12 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package ui
 
 import (
 	"encoding/json"
-	"os"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/Tea"
+	"os"
 )
 
 type HideTipAction struct {

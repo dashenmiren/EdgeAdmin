@@ -1,15 +1,14 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package iplists
 
 import (
-	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/types"
+	"strings"
 )
 
 type DeleteCountAction struct {

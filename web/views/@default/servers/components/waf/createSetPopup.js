@@ -40,16 +40,4 @@ Tea.context(function () {
 		}
 		return group.sets
 	}
-
-	// 使用代码
-	this.useCode = false
-	this.switchToCode = function () {
-		this.useCode = !this.useCode
-
-		if (this.useCode) {
-			this.$delay(function () {
-				this.$refs.codeInput.focus()
-			})
-		}
-	}
 })

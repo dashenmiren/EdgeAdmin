@@ -1,4 +1,4 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package gen
 
@@ -6,19 +6,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/servers/server/settings/conds/condutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/nodeconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/conds/condutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/files"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
+	"io"
+	"os"
+	"path/filepath"
 )
 
 func Generate() error {
@@ -40,11 +39,8 @@ func generateComponentsJSFile() error {
 	} else {
 		webRoot = Tea.Root + "/web/public/js/components/"
 	}
-	gitDir, gDirFound := os.LookupEnv("GithubDIR")
-	if gDirFound {
-		webRoot = gitDir + "/EdgeAdmin/web/public/js/components/"
-	}
 	f := files.NewFile(webRoot)
+
 	f.Range(func(file *files.File) {
 		if !file.IsFile() {
 			return
@@ -57,7 +53,6 @@ func generateComponentsJSFile() error {
 			logs.Error(err)
 			return
 		}
-
 		buffer.Write(data)
 		buffer.Write([]byte{'\n', '\n'})
 	})
@@ -160,12 +155,7 @@ func generateComponentsJSFile() error {
 		buffer.Write([]byte{';', '\n', '\n'})
 	}
 
-	pubPath := Tea.PublicFile("/js/components.src.js")
-	if gDirFound {
-		pubPath = gitDir + "/EdgeAdmin/web/public/js/components.src.js"
-	}
-
-	fp, err := os.OpenFile(filepath.Clean(pubPath), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
+	fp, err := os.OpenFile(filepath.Clean(Tea.PublicFile("/js/components.src.js")), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0777)
 	if err != nil {
 		return err
 	}

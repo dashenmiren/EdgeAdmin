@@ -1,19 +1,17 @@
-// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package setup
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
+	"github.com/iwind/TeaGo/dbs"
+	"github.com/iwind/TeaGo/maps"
 	"net"
-	"net/url"
 	"os"
 	"runtime"
 	"strings"
 	"time"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/configutils"
-	"github.com/iwind/TeaGo/dbs"
-	"github.com/iwind/TeaGo/maps"
 )
 
 // DetectDBAction 尝试从本地服务器中发现MySQL
@@ -50,7 +48,7 @@ func (this *DetectDBAction) RunPost(params struct{}) {
 			for _, pass := range passwords {
 				db, err := dbs.NewInstanceFromConfig(&dbs.DBConfig{
 					Driver: "mysql",
-					Dsn:    url.QueryEscape(username) + ":" + url.QueryEscape(pass) + "@tcp(" + configutils.QuoteIP(localHost) + ":" + localPort + ")/edges",
+					Dsn:    username + ":" + pass + "@tcp(" + configutils.QuoteIP(localHost) + ":" + localPort + ")/edges",
 					Prefix: "",
 				})
 				if err == nil {

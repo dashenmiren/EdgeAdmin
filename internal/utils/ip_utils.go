@@ -3,11 +3,10 @@ package utils
 import (
 	"bytes"
 	"errors"
+	"github.com/TeaOSLab/EdgeCommon/pkg/iputils"
+	"github.com/iwind/TeaGo/types"
 	"net"
 	"strings"
-
-	"github.com/dashenmiren/EdgeCommon/pkg/iputils"
-	"github.com/iwind/TeaGo/types"
 )
 
 // ParseIPValue 解析IP值

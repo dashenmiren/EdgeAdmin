@@ -2,12 +2,11 @@ package settings
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/nodeconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
@@ -115,8 +114,6 @@ func (this *IndexAction) RunGet(params struct {
 		"autoInstallNftables": cluster.AutoInstallNftables,
 		"autoSystemTuning":    cluster.AutoSystemTuning,
 		"autoTrimDisks":       cluster.AutoTrimDisks,
-		"maxConcurrentReads":  cluster.MaxConcurrentReads,
-		"maxConcurrentWrites": cluster.MaxConcurrentWrites,
 		"sshParams":           sshParams,
 		"domainName":          fullDomainName,
 	}
@@ -146,8 +143,6 @@ func (this *IndexAction) RunPost(params struct {
 	AutoInstallNftables bool
 	AutoSystemTuning    bool
 	AutoTrimDisks       bool
-	MaxConcurrentReads  int32
-	MaxConcurrentWrites int32
 
 	Must *actions.Must
 }) {
@@ -205,8 +200,6 @@ func (this *IndexAction) RunPost(params struct {
 		AutoSystemTuning:    params.AutoSystemTuning,
 		AutoTrimDisks:       params.AutoTrimDisks,
 		SshParamsJSON:       sshParamsJSON,
-		MaxConcurrentReads:  params.MaxConcurrentReads,
-		MaxConcurrentWrites: params.MaxConcurrentWrites,
 	})
 	if err != nil {
 		this.ErrorPage(err)

@@ -2,15 +2,14 @@ package pages
 
 import (
 	"encoding/json"
-	"regexp"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 type IndexAction struct {
@@ -48,7 +47,6 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	this.Data["webId"] = webConfig.Id
-	this.Data["enableGlobalPages"] = webConfig.EnableGlobalPages
 	this.Data["pages"] = webConfig.Pages
 	this.Data["shutdownConfig"] = webConfig.Shutdown
 
@@ -56,11 +54,10 @@ func (this *IndexAction) RunGet(params struct {
 }
 
 func (this *IndexAction) RunPost(params struct {
-	WebId             int64
-	PagesJSON         []byte
-	ShutdownJSON      []byte
-	EnableGlobalPages bool
-	Must              *actions.Must
+	WebId        int64
+	PagesJSON    []byte
+	ShutdownJSON []byte
+	Must         *actions.Must
 }) {
 	// 日志
 	defer this.CreateLogInfo(codes.ServerPage_LogUpdatePages, params.WebId)
@@ -138,16 +135,7 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	}
 
-	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebGlobalPagesEnabled(this.AdminContext(), &pb.UpdateHTTPWebGlobalPagesEnabledRequest{
-		HttpWebId: params.WebId,
-		IsEnabled: params.EnableGlobalPages,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebPages(this.AdminContext(), &pb.UpdateHTTPWebPagesRequest{
+	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebPages(this.AdminContext(), &pb.UpdateHTTPWebPagesRequest{
 		HttpWebId: params.WebId,
 		PagesJSON: params.PagesJSON,
 	})

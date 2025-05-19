@@ -1,16 +1,16 @@
 package cluster
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/groups"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/cache"
-	ddosProtection "github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/ddos-protection"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/dns"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/ssh"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/system"
-	clusters "github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/clusters/clusterutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/groups"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/cache"
+	ddosProtection "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/ddos-protection"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/dns"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/ssh"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/system"
+	clusters "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/clusterutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 
@@ -48,7 +48,6 @@ func init() {
 			Get("/logs", new(node.LogsAction)).
 			Post("/start", new(node.StartAction)).
 			Post("/stop", new(node.StopAction)).
-			Post("/uninstall", new(node.UninstallAction)).
 			Post("/up", new(node.UpAction)).
 			Post("/updateIsOn", new(node.UpdateIsOnAction)).
 			Get("/detail", new(node.DetailAction)).

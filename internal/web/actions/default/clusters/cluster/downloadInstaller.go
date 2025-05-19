@@ -1,16 +1,15 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package cluster
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/Tea"
+	"github.com/iwind/TeaGo/types"
 	"io"
 	"net/http"
 	"os"
 	"regexp"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/iwind/TeaGo/Tea"
-	"github.com/iwind/TeaGo/types"
 )
 
 type DownloadInstallerAction struct {

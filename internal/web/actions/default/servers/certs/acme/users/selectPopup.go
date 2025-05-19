@@ -1,6 +1,6 @@
 package users
 
-import "github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+import "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 
 type SelectPopupAction struct {
 	actionutils.ParentAction

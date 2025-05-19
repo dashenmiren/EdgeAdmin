@@ -1,10 +1,10 @@
 package ipadmin
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
@@ -53,7 +53,7 @@ func (this *TestAction) RunPost(params struct {
 		return
 	}
 
-	var resultMap = maps.Map{
+	resultMap := maps.Map{
 		"isDone":    true,
 		"isFound":   resp.IsFound,
 		"isOk":      resp.IsOk,
@@ -79,7 +79,6 @@ func (this *TestAction) RunPost(params struct {
 			"expiredTime":    timeutil.FormatTime("Y-m-d H:i:s", resp.IpItem.ExpiredAt),
 			"type":           resp.IpItem.Type,
 			"eventLevelName": firewallconfigs.FindFirewallEventLevelName(resp.IpItem.EventLevel),
-			"listType":       resp.IpItem.ListType,
 		}
 	}
 

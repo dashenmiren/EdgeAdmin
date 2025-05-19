@@ -1,15 +1,13 @@
 package ipadmin
 
 import (
-	"time"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/ipconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
+	"time"
 )
 
 type DenyListAction struct {
@@ -36,7 +34,7 @@ func (this *DenyListAction) RunGet(params struct {
 
 	// 创建
 	if listId == 0 {
-		listId, err = dao.SharedIPListDAO.CreateIPListForServerId(this.AdminContext(), params.ServerId, ipconfigs.IPListTypeBlack)
+		listId, err = dao.SharedIPListDAO.CreateIPListForServerId(this.AdminContext(), params.ServerId, "black")
 		if err != nil {
 			this.ErrorPage(err)
 			return

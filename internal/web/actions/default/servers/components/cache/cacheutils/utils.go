@@ -2,11 +2,10 @@ package cacheutils
 
 import (
 	"encoding/json"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/errors"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/errors"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 )
 
 // FindCachePolicyNameWithoutError 查找缓存策略名称并忽略错误
@@ -30,12 +29,11 @@ func FindCachePolicy(parent *actionutils.ParentAction, cachePolicyId int64) (*se
 	if len(resp.HttpCachePolicyJSON) == 0 {
 		return nil, errors.New("cache policy not found")
 	}
-	var config = &serverconfigs.HTTPCachePolicy{}
+	config := &serverconfigs.HTTPCachePolicy{}
 	err = json.Unmarshal(resp.HttpCachePolicyJSON, config)
 	if err != nil {
 		return nil, err
 	}
-
 	return config, nil
 }
 

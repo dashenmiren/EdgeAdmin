@@ -10,6 +10,7 @@ Tea.context(function () {
 
 		this.$post("$")
 			.params({localSid: sid, "ip": ip})
+			.post()
 			.success(function (resp) {
 				if (!resp.data.isOk) {
 					window.location = "/logout"
@@ -27,7 +28,7 @@ Tea.context(function () {
 					} else {
 						window.location = "/dashboard"
 					}
-				}, 100)
+				})
 			})
 	})
 })

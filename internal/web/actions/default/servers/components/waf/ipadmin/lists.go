@@ -1,14 +1,13 @@
 package ipadmin
 
 import (
-	"time"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/dao"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
-	"github.com/dashenmiren/EdgeCommon/pkg/serverconfigs/firewallconfigs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
+	"time"
 )
 
 type ListsAction struct {
@@ -40,8 +39,8 @@ func (this *ListsAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var count = countResp.Count
-	var page = this.NewPage(count)
+	count := countResp.Count
+	page := this.NewPage(count)
 	this.Data["page"] = page.AsHTML()
 
 	// 列表
@@ -54,9 +53,9 @@ func (this *ListsAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var itemMaps = []maps.Map{}
+	itemMaps := []maps.Map{}
 	for _, item := range itemsResp.IpItems {
-		var expiredTime = ""
+		expiredTime := ""
 		if item.ExpiredAt > 0 {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}

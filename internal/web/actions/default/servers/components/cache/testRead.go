@@ -1,14 +1,12 @@
 package cache
 
-import (
+import (	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"net/http"
 	"strconv"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/messageconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
 )
 
 type TestReadAction struct {
@@ -41,7 +39,7 @@ func (this *TestReadAction) RunPost(params struct {
 		CachePolicyJSON: cachePolicyJSON,
 		Key:             params.Key,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeReadCache, msg, 10, false)
+	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeReadCache, msg, 10)
 	if err != nil {
 		this.ErrorPage(err)
 		return

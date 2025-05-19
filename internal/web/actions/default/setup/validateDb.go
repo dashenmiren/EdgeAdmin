@@ -1,18 +1,16 @@
 package setup
 
 import (
-	"net"
-	"net/url"
-	"regexp"
-	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/configutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/dbs"
 	"github.com/iwind/TeaGo/maps"
 	stringutil "github.com/iwind/TeaGo/utils/string"
+	"net"
+	"regexp"
+	"strings"
 )
 
 type ValidateDbAction struct {
@@ -59,7 +57,7 @@ func (this *ValidateDbAction) RunPost(params struct {
 	// 测试连接
 	db, err := dbs.NewInstanceFromConfig(&dbs.DBConfig{
 		Driver: "mysql",
-		Dsn:    url.QueryEscape(params.Username) + ":" + params.Password + "@tcp(" + configutils.QuoteIP(params.Host) + ":" + params.Port + ")/" + params.Database,
+		Dsn:    params.Username + ":" + params.Password + "@tcp(" + configutils.QuoteIP(params.Host) + ":" + params.Port + ")/" + params.Database,
 		Prefix: "",
 	})
 	if err != nil {

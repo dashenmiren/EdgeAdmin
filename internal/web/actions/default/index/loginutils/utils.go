@@ -1,18 +1,17 @@
-// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://goedge.cn .
 
 package loginutils
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeCommon/pkg/iplibrary"
+	"github.com/iwind/TeaGo/actions"
+	stringutil "github.com/iwind/TeaGo/utils/string"
 	"net"
 	"net/http"
 	"regexp"
 	"strings"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
-	"github.com/dashenmiren/EdgeCommon/pkg/iplibrary"
-	"github.com/iwind/TeaGo/actions"
-	stringutil "github.com/iwind/TeaGo/utils/string"
 )
 
 // CalculateClientFingerprint 计算客户端指纹

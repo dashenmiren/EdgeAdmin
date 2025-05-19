@@ -1,9 +1,9 @@
 package remoteAddr
 
 import (
-	"github.com/dashenmiren/EdgeAdmin/internal/configloaders"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/servers/serverutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/serverutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 

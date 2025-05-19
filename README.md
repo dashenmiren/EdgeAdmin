@@ -38,17 +38,26 @@
 * 流量限制
 
 ## 在线演示
-* [http://demo.cdn.foyeseo.com](http://demo.cdn.foyeseo.com)
+* [http://demo.goedge.cn](http://demo.goedge.cn)
 
 ## 文档
-* [新手指南](https://cdn.foyeseo.com/docs/QuickStart/Index.md)
-* [完整文档](https://cdn.foyeseo.com/docs)
-* [开发者指南](https://cdn.foyeseo.com/docs/Developer/Build.md)
+* [新手指南](https://goedge.cn/docs/QuickStart/Index.md)
+* [完整文档](https://goedge.cn/docs)
+* [开发者指南](https://goedge.cn/docs/Developer/Build.md)
 
 ## 架构
 ![架构图](doc/architect-zh.png)
 
 其中的组件源码地址如下：
-* [边缘节点](https://github.com/dashenmiren/EdgeNode)
-* [API节点](https://github.com/dashenmiren/EdgeAPI)
-* [管理平台](https://github.com/dashenmiren/EdgeAdmin)
+* [边缘节点](https://github.com/TeaOSLab/EdgeNode)
+* [API节点](https://github.com/TeaOSLab/EdgeAPI)
+* [管理平台](https://github.com/TeaOSLab/EdgeAdmin)
+
+## 联系我们
+有什么问题和建议都可以加入 [Telegram群](https://t.me/+5kVCMGxQhZxiODY9) 
+
+## 企业版
+* [GoEdge企业版](https://goedge.cn/commercial) - 功能更强大的CDN系统
+
+## 感谢
+* 感谢 [Gitee](https://gitee.com/) 提供国内源代码托管平台

@@ -1,12 +1,11 @@
-// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
+// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package utils_test
 
 import (
-	"testing"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/iwind/TeaGo/assert"
+	"testing"
 )
 
 func TestJSONClone(t *testing.T) {
@@ -25,6 +24,7 @@ func TestJSONClone(t *testing.T) {
 		t.Logf("%p, %#v", c, c)
 	}
 }
+
 
 func TestJSONIsNull(t *testing.T) {
 	var a = assert.NewAssertion(t)

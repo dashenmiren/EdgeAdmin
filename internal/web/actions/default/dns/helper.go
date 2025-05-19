@@ -1,9 +1,8 @@
 package dns
 
 import (
-	"net/http"
-
 	"github.com/iwind/TeaGo/actions"
+	"net/http"
 )
 
 type Helper struct {

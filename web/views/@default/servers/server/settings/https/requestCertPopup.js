@@ -1,8 +1,6 @@
 Tea.context(function () {
 	this.isRequesting = false
 	this.userId = 0
-	this.asyncCreateCert = false
-	this.providerCode = "letsencrypt"
 
 	this.remove = function (index) {
 		this.serverNames.$remove(index)

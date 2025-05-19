@@ -1,17 +1,15 @@
 package cache
 
-import (
-	"net/http"
-	"strconv"
-
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
-	"github.com/dashenmiren/EdgeCommon/pkg/langs/codes"
-	"github.com/dashenmiren/EdgeCommon/pkg/messageconfigs"
-	"github.com/dashenmiren/EdgeCommon/pkg/rpc/pb"
+import (	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/langs/codes"
+	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"net/http"
+	"strconv"
 )
 
 type CleanAction struct {
@@ -75,7 +73,7 @@ func (this *CleanAction) RunPost(params struct {
 	msg := &messageconfigs.CleanCacheMessage{
 		CachePolicyJSON: cachePolicyJSON,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeCleanCache, msg, 60, false)
+	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeCleanCache, msg, 60)
 	if err != nil {
 		this.ErrorPage(err)
 		return
