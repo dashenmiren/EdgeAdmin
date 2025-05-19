@@ -7,7 +7,7 @@
     <warning-message v-if="!featureIsOn">尚未为当前用户开通此功能。</warning-message>
 
     {$ if .featureIsOn}
-    <warning-message v-if="!wafIsOn">当前WAF未启用，设置将在<a :href="'/servers/server/settings/waf?serverId=' + serverId">[启用]</a>后生效。</warning-message>
+    <warning-message v-if="!wafIsOn">当前WAF未启用，设置将在<a :href="'/servers/server/settings/waf?serverId=' + serverId">[启用Web防火墙]</a>后生效。</warning-message>
 
 	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 		<input type="hidden" name="firewallPolicyId" :value="firewallPolicyId"/>
@@ -38,6 +38,13 @@
                 <tr>
                     <td>限制URL &nbsp;<tip-icon content="只对这些URL做限制。"></tip-icon></td>
                     <td><url-patterns-box v-model="onlyURLPatterns"></url-patterns-box></td>
+                </tr>
+                <tr>
+                    <td>允许搜索引擎</td>
+                    <td>
+                        <checkbox name="allowSearchEngine" v-model="allowSearchEngine"></checkbox>
+                        <p class="comment">选中后，表示如果请求来自常见搜索引擎的IP，则不受区域限制。</p>
+                    </td>
                 </tr>
             </tbody>
 		</table>

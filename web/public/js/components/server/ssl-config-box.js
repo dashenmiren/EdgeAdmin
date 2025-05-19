@@ -98,7 +98,7 @@ Vue.component("ssl-config-box", {
 		// 删除证书
 		removeCert: function (index) {
 			let that = this
-			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前服务不再使用此证书。", function () {
+			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前网站不再使用此证书。", function () {
 				that.policy.certRefs.$remove(index)
 				that.policy.certs.$remove(index)
 			})
@@ -385,7 +385,7 @@ Vue.component("ssl-config-box", {
 		// 删除客户端CA证书
 		removeClientCACert: function (index) {
 			let that = this
-			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前服务不再使用此证书。", function () {
+			teaweb.confirm("确定删除此证书吗？证书数据仍然保留，只是当前网站不再使用此证书。", function () {
 				that.policy.clientCARefs.$remove(index)
 				that.policy.clientCACerts.$remove(index)
 			})
@@ -415,7 +415,7 @@ Vue.component("ssl-config-box", {
 				</td>
 			</tr>
 			<tr>
-				<td class="title">选择证书</td>
+				<td class="title">设置证书</td>
 				<td>
 					<div v-if="policy.certs != null && policy.certs.length > 0">
 						<div class="ui label small basic" v-for="(cert, index) in policy.certs" style="margin-top: 0.2em">

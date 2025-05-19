@@ -1,4 +1,4 @@
-// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
 
 package globalServerConfig
 
@@ -110,6 +110,7 @@ func (this *IndexAction) RunPost(params struct {
 	HttpAllNodeIPShowPage                  bool
 	HttpAllEnableServerAddrVariable        bool
 	HttpAllRequestOriginsWithEncodings     bool
+	HttpAllXFFMaxAddresses                 int
 
 	HttpAllDomainAuditingIsOn   bool
 	HttpAllDomainAuditingPrompt string
@@ -219,6 +220,7 @@ func (this *IndexAction) RunPost(params struct {
 	config.HTTPAll.LnRequestSchedulingMethod = params.HttpAllLnRequestSchedulingMethod
 	config.HTTPAll.EnableServerAddrVariable = params.HttpAllEnableServerAddrVariable
 	config.HTTPAll.RequestOriginsWithEncodings = params.HttpAllRequestOriginsWithEncodings
+	config.HTTPAll.XFFMaxAddresses = params.HttpAllXFFMaxAddresses
 
 	// 访问日志
 	config.HTTPAccessLog.IsOn = params.HttpAccessLogIsOn

@@ -1,4 +1,4 @@
-// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
 
 package ddosProtection
 
@@ -34,7 +34,7 @@ func (this *StatusAction) RunPost(params struct {
 }) {
 	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodeCheckLocalFirewall, &messageconfigs.CheckLocalFirewallMessage{
 		Name: "nftables",
-	}, 10)
+	}, 10, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

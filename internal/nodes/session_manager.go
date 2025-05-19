@@ -1,4 +1,4 @@
-// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
 
 package nodes
 
@@ -73,7 +73,7 @@ func (this *SessionManager) Read(sid string) map[string]string {
 
 func (this *SessionManager) WriteItem(sid string, key string, value string) bool {
 	// 删除缓存
-	defer ttlcache.DefaultCache.Delete( "SESSION@" + sid)
+	defer ttlcache.DefaultCache.Delete("SESSION@" + sid)
 
 	// 忽略OTP
 	if strings.HasSuffix(sid, "_otp") {
@@ -99,7 +99,7 @@ func (this *SessionManager) WriteItem(sid string, key string, value string) bool
 
 func (this *SessionManager) Delete(sid string) bool {
 	// 删除缓存
-	defer ttlcache.DefaultCache.Delete( "SESSION@" + sid)
+	defer ttlcache.DefaultCache.Delete("SESSION@" + sid)
 
 	// 忽略OTP
 	if strings.HasSuffix(sid, "_otp") {

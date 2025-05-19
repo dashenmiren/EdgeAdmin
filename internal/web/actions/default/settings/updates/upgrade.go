@@ -5,7 +5,9 @@ package updates
 import (
 	"fmt"
 	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	executils "github.com/dashenmiren/EdgeAdmin/internal/utils/exec"
 	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/settings/updates/updateutils"
 	"os"
 	"os/exec"
 	"time"
@@ -13,6 +15,7 @@ import (
 
 var upgradeProgress float32
 var isUpgrading = false
+var isUpgradingDB = false
 
 type UpgradeAction struct {
 	actionutils.ParentAction
@@ -21,6 +24,7 @@ type UpgradeAction struct {
 func (this *UpgradeAction) RunGet(params struct {
 }) {
 	this.Data["isUpgrading"] = isUpgrading
+	this.Data["isUpgradingDB"] = isUpgradingDB
 	this.Data["upgradeProgress"] = fmt.Sprintf("%.2f", upgradeProgress*100)
 	this.Success()
 }
@@ -58,6 +62,22 @@ func (this *UpgradeAction) RunPost(params struct {
 	if err != nil {
 		this.Fail("下载失败：" + err.Error())
 		return
+	}
+
+	// try to exec local 'edge-api upgrade'
+	exePath, ok := updateutils.CheckLocalAPINode(this.RPC(), this.AdminContext())
+	if ok && len(exePath) > 0 {
+		isUpgradingDB = true
+		var before = time.Now()
+		var cmd = executils.NewCmd(exePath, "upgrade")
+		_ = cmd.Run()
+		var costSeconds = time.Since(before).Seconds()
+
+		// sleep to show upgrading status
+		if costSeconds < 3 {
+			time.Sleep(3 * time.Second)
+		}
+		isUpgradingDB = false
 	}
 
 	// restart

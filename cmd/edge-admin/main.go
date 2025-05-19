@@ -9,8 +9,11 @@ import (
 	teaconst "github.com/dashenmiren/EdgeAdmin/internal/const"
 	"github.com/dashenmiren/EdgeAdmin/internal/gen"
 	"github.com/dashenmiren/EdgeAdmin/internal/nodes"
+	"github.com/dashenmiren/EdgeAdmin/internal/rpc"
 	"github.com/dashenmiren/EdgeAdmin/internal/utils"
+	executils "github.com/dashenmiren/EdgeAdmin/internal/utils/exec"
 	_ "github.com/dashenmiren/EdgeAdmin/internal/web"
+	"github.com/dashenmiren/EdgeAdmin/internal/web/actions/default/settings/updates/updateutils"
 	_ "github.com/dashenmiren/EdgeCommon/pkg/langs/messages"
 	"github.com/iwind/TeaGo/Tea"
 	_ "github.com/iwind/TeaGo/bootstrap"
@@ -156,6 +159,9 @@ func main() {
 			for range ticker.C {
 				if manager.IsDownloading() {
 					if !isStarted {
+						if len(manager.NewVersion()) == 0 {
+							continue
+						}
 						log.Println("start downloading v" + manager.NewVersion() + " ...")
 						isStarted = true
 					}
@@ -176,6 +182,18 @@ func main() {
 			log.Println("upgrade failed: " + err.Error())
 			return
 		}
+
+		// try to exec local 'edge-api upgrade'
+		rpcClient, err := rpc.SharedRPC()
+		if err == nil {
+			exePath, ok := updateutils.CheckLocalAPINode(rpcClient, rpcClient.Context(0))
+			if ok && len(exePath) > 0 {
+				log.Println("upgrading database ...")
+				var cmd = executils.NewCmd(exePath, "upgrade")
+				_ = cmd.Run()
+			}
+		}
+
 		log.Println("finished!")
 		log.Println("restarting ...")
 		app.RunRestart()

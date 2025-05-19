@@ -39,8 +39,8 @@ func (this *ListsAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	count := countResp.Count
-	page := this.NewPage(count)
+	var count = countResp.Count
+	var page = this.NewPage(count)
 	this.Data["page"] = page.AsHTML()
 
 	// 列表
@@ -53,9 +53,9 @@ func (this *ListsAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	itemMaps := []maps.Map{}
+	var itemMaps = []maps.Map{}
 	for _, item := range itemsResp.IpItems {
-		expiredTime := ""
+		var expiredTime = ""
 		if item.ExpiredAt > 0 {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}

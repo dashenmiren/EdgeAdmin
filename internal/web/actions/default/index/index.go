@@ -227,15 +227,27 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 写入SESSION
+	var currentIP = loginutils.RemoteIP(&this.ActionObject)
 	var localSid = rands.HexString(32)
 	this.Data["localSid"] = localSid
-	this.Data["ip"] = loginutils.RemoteIP(&this.ActionObject)
+	this.Data["ip"] = currentIP
 	params.Auth.StoreAdmin(adminId, params.Remember, localSid)
+
+	// 清理老的SESSION
+	_, err = this.RPC().LoginSessionRPC().ClearOldLoginSessions(this.AdminContext(), &pb.ClearOldLoginSessionsRequest{
+		Sid: this.Session().Sid,
+		Ip:  currentIP,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 
 	// 记录日志
 	err = dao.SharedLogDAO.CreateAdminLog(rpcClient.Context(adminId), oplogs.LevelInfo, this.Request.URL.Path, langs.DefaultMessage(codes.AdminLogin_LogSuccess, params.Username), loginutils.RemoteIP(&this.ActionObject), codes.AdminLogin_LogSuccess, []any{params.Username})
 	if err != nil {
-		utils.PrintError(err)
+		this.ErrorPage(err)
+		return
 	}
 
 	this.Success()
@@ -243,6 +255,7 @@ func (this *IndexAction) RunPost(params struct {
 
 // 检查登录区域
 func (this *IndexAction) checkRegion() bool {
+	return true // 暂时不限制
 	var ip = loginutils.RemoteIP(&this.ActionObject)
 	var result = iplibrary.LookupIP(ip)
 	if result != nil && result.IsOk() && result.CountryId() > 0 && lists.ContainsInt64([]int64{9, 10}, result.CountryId()) {

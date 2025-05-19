@@ -1,4 +1,4 @@
-// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
 
 package gen
 
@@ -39,7 +39,7 @@ func generateComponentsJSFile() error {
 	} else {
 		webRoot = Tea.Root + "/web/public/js/components/"
 	}
-	f := files.NewFile(webRoot)
+	var f = files.NewFile(webRoot)
 
 	f.Range(func(file *files.File) {
 		if !file.IsFile() {
@@ -53,6 +53,7 @@ func generateComponentsJSFile() error {
 			logs.Error(err)
 			return
 		}
+
 		buffer.Write(data)
 		buffer.Write([]byte{'\n', '\n'})
 	})

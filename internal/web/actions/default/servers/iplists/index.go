@@ -1,4 +1,4 @@
-// Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+// Copyright 2021 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
 
 package iplists
 
@@ -84,7 +84,7 @@ func (this *IndexAction) RunGet(params struct {
 	var itemMaps = []maps.Map{}
 	for _, result := range itemsResp.Results {
 		var item = result.IpItem
-		expiredTime := ""
+		var expiredTime = ""
 		if item.ExpiredAt > 0 {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}

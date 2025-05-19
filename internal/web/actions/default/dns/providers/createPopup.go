@@ -1,4 +1,4 @@
-// Copyright 2022 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+// Copyright 2022 GoEdge CDN goedge.cdn@gmail.com. All rights reserved.
 
 //go:build !plus
 
@@ -83,6 +83,8 @@ func (this *CreatePopupAction) RunPost(params struct {
 	ParamEdgeDNSAPIHost            string
 	ParamEdgeDNSAPIAccessKeyId     string
 	ParamEdgeDNSAPIAccessKeySecret string
+
+	MinTTL int32
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -177,6 +179,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Name:          params.Name,
 		Type:          params.Type,
 		ApiParamsJSON: apiParams.AsJSON(),
+		MinTTL:        params.MinTTL,
 	})
 	if err != nil {
 		this.ErrorPage(err)

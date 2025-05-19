@@ -1,4 +1,4 @@
-// Copyright 2023 Liuxiangchao iwind.liu@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
+// Copyright 2023 GoEdge CDN goedge.cdn@gmail.com. All rights reserved. Official site: https://cdn.foyeseo.com .
 
 package mysqlinstallers
 
@@ -88,15 +88,29 @@ func (this *MySQLInstaller) InstallFromFile(xzFilePath string, targetDir string)
 	}
 
 	// ubuntu apt
-	aptExe, err := executils.LookPath("apt")
-	if err == nil && len(aptExe) > 0 {
-		for _, lib := range []string{"libaio1", "libncurses5"} {
+	aptGetExe, err := exec.LookPath("apt-get")
+	if err == nil && len(aptGetExe) > 0 {
+		for _, lib := range []string{"libaio1", "libncurses5", "libnuma1"} {
 			this.log("checking " + lib + " ...")
-			var cmd = utils.NewCmd("apt", "-y", "install", lib)
+			var cmd = utils.NewCmd(aptGetExe, "-y", "install", lib)
 			cmd.WithStderr()
 			err = cmd.Run()
 			if err != nil {
-				return errors.New("install " + lib + " failed: " + cmd.Stderr())
+				// try apt
+				aptExe, aptErr := exec.LookPath("apt")
+				if aptErr == nil && len(aptExe) > 0 {
+					cmd = utils.NewCmd(aptExe, "-y", "install", lib)
+					cmd.WithStderr()
+					err = cmd.Run()
+				}
+
+				if err != nil {
+					if lib == "libnuma1" {
+						err = nil
+					} else {
+						return errors.New("install " + lib + " failed: " + cmd.Stderr())
+					}
+				}
 			}
 			time.Sleep(1 * time.Second)
 		}
@@ -627,6 +641,13 @@ WantedBy=multi-user.target`
 
 // install 'tar' command automatically
 func (this *MySQLInstaller) installTarCommand() error {
+	// dnf
+	dnfExe, err := exec.LookPath("dnf")
+	if err == nil && len(dnfExe) > 0 {
+		var cmd = utils.NewTimeoutCmd(10*time.Second, dnfExe, "-y", "install", "tar")
+		return cmd.Run()
+	}
+
 	// yum
 	yumExe, err := executils.LookPath("yum")
 	if err == nil && len(yumExe) > 0 {
@@ -634,11 +655,19 @@ func (this *MySQLInstaller) installTarCommand() error {
 		return cmd.Run()
 	}
 
-	// apt
-	aptExe, err := executils.LookPath("apt")
-	if err == nil && len(aptExe) > 0 {
-		var cmd = utils.NewTimeoutCmd(10*time.Second, aptExe, "-y", "install", "tar")
-		return cmd.Run()
+	// apt-get
+	aptGetExe, err := exec.LookPath("apt-get")
+	if err == nil && len(aptGetExe) > 0 {
+		var cmd = utils.NewTimeoutCmd(10*time.Second, aptGetExe, "-y", "install", "tar")
+		err = cmd.Run()
+		if err != nil {
+			aptExe, aptErr := exec.LookPath("apt")
+			if aptErr == nil {
+				cmd = utils.NewTimeoutCmd(10*time.Second, aptExe, "-y", "install", "tar")
+				err = cmd.Run()
+			}
+		}
+		return err
 	}
 
 	return nil
